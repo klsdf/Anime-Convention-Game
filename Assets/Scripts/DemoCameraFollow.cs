@@ -6,7 +6,7 @@ public class DemoCameraFollow : MonoBehaviour
 {
 
 
-    private Camera camera;
+    private Camera  mycamera;
     //public Transform[] targets;
     public Transform nowTarget;
     private int index = 0;
@@ -21,8 +21,8 @@ public class DemoCameraFollow : MonoBehaviour
 
     private void Start()
     {
-        camera = GetComponent<Camera>();
-        camera.orthographicSize = 4;
+        mycamera = GetComponent<Camera>();
+        mycamera.orthographicSize = 4;
         //nowTarget = targets[index];
     }
     public float dragSpeed = 20; // 拖动速度
@@ -49,11 +49,11 @@ public class DemoCameraFollow : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftBracket))
         {
-            camera.orthographicSize -= 0.1f;
+            mycamera.orthographicSize -= 0.1f;
         }
         else if (Input.GetKey(KeyCode.RightBracket))
         {
-            camera.orthographicSize += 0.1f;
+            mycamera.orthographicSize += 0.1f;
         }
 
         //if (Input.GetKeyDown(KeyCode.Q))
@@ -80,8 +80,8 @@ public class DemoCameraFollow : MonoBehaviour
 
         float scrollData;
         scrollData = Input.GetAxis("Mouse ScrollWheel");
-        camera.orthographicSize -= scrollData * zoomSpeed;
-        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, minZoom, maxZoom);
+        mycamera.orthographicSize -= scrollData * zoomSpeed;
+        mycamera.orthographicSize = Mathf.Clamp(mycamera.orthographicSize, minZoom, maxZoom);
     }
 
     private void FixedUpdate()

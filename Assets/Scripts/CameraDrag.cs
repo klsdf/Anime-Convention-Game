@@ -17,7 +17,7 @@ public class CameraDrag : MonoBehaviour
 
     void Update()
     {  // 检查是否点击在 UI 上
-        if (IsPointerOverUIObject())
+        if (GameManager.Instance.isDragingObject == true)
         {
             return; // 如果在 UI 上，则不进行拖动和缩放
         }
@@ -47,7 +47,7 @@ public class CameraDrag : MonoBehaviour
 
         // 鼠标滚轮缩放
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        print(scroll);
+        //print(scroll);
         if (scroll != 0.0f)
         {
             

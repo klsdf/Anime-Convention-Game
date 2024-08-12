@@ -25,6 +25,7 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        GameManager.Instance.isDragingObject = true;
         // 开始拖动时，使图标透明，并阻止与其他 UI 元素的交互
         //canvasGroup.alpha = 0.6f;
         //canvasGroup.blocksRaycasts = false;
@@ -49,6 +50,9 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
+        GameManager.Instance.isDragingObject = false;
+
         // 结束拖动时，恢复图标透明度，并允许与其他 UI 元素的交互
         //canvasGroup.alpha = 1f;
         //canvasGroup.blocksRaycasts = true;
@@ -56,7 +60,9 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         // 在拖拽结束的位置生成物体
         Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f)); // 假设物体生成在距离相机10个单位的位置
         GameObject obj =  Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
-        obj.GetComponent<SpriteRenderer>().sprite = image.sprite;
+
+        if (image.sprite !=null)
+            obj.GetComponent<SpriteRenderer>().sprite = image.sprite;
         //obj.GetComponent<Rigidbody2D>().gravityScale = hasGravity ? 1f : 0f; // 是否具有重力
         rectTransform.anchoredPosition = startPos;
     }

@@ -1,4 +1,6 @@
 using UnityEngine;
+//作者：闫辰祥
+//创建时间: 2024年8月9日
 
 public class Drag2DObject : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class Drag2DObject : MonoBehaviour
         Vector3 mousePosition = GetMouseWorldPosition();
         offset = transform.position - mousePosition;
         isDragging = true;
+        GameManager.Instance.isDragingObject = true;
     }
 
     void OnMouseDrag()
@@ -32,6 +35,7 @@ public class Drag2DObject : MonoBehaviour
     {
         // 停止拖动
         isDragging = false;
+        GameManager.Instance.isDragingObject = false;
     }
 
     private Vector3 GetMouseWorldPosition()
