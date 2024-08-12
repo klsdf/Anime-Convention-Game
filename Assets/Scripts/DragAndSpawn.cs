@@ -9,7 +9,7 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Canvas canvas;
     private CanvasGroup canvasGroup;
 
-    public bool hasGravity; // 是否具有重力
+    //public bool hasGravity; // 是否具有重力
 
     private Image image;
 
@@ -57,7 +57,7 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f)); // 假设物体生成在距离相机10个单位的位置
         GameObject obj =  Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
         obj.GetComponent<SpriteRenderer>().sprite = image.sprite;
-        obj.GetComponent<Rigidbody2D>().gravityScale = hasGravity ? 1f : 0f; // 是否具有重力
+        //obj.GetComponent<Rigidbody2D>().gravityScale = hasGravity ? 1f : 0f; // 是否具有重力
         rectTransform.anchoredPosition = startPos;
     }
 }
