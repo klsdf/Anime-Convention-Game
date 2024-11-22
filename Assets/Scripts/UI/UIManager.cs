@@ -10,7 +10,6 @@ using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject settingUI;
     void Start()
     {
 
@@ -23,5 +22,9 @@ public class UIManager : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene("TopDown");
+    }
+    public void BeingAssert()
+    {
+        SceneManager.LoadScene("GetAssert");
     }
 }

@@ -33,6 +33,7 @@ public class GameManager : Singleton<GameManager>
     public void SettingUI(SettingUI settingUI)
     {
         setting = settingUI;
+        setting.gameObject.SetActive(false);
     }
     /// <summary>
     /// 添加音乐播放器
