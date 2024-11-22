@@ -16,7 +16,8 @@ public class CameraDrag : MonoBehaviour
     private bool isDragging = false; // 是否正在拖动
 
     void Update()
-    {  // 检查是否点击在 UI 上
+    {
+        // 检查是否点击在 UI 上
         if (GameManager.Instance.isDragingObject == true)
         {
             return; // 如果在 UI 上，则不进行拖动和缩放
@@ -50,7 +51,7 @@ public class CameraDrag : MonoBehaviour
         //print(scroll);
         if (scroll != 0.0f)
         {
-            
+
             float newSize = Camera.main.orthographicSize - scroll * zoomSpeed;
             Camera.main.orthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
         }

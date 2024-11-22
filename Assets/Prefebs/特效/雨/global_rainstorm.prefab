@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 408776380369188065}
   - component: {fileID: -845630533662956011}
+  - component: {fileID: -7259442962022681924}
   m_Layer: 0
   m_Name: global_rainstorm
   m_TagString: Untagged
@@ -130,6 +131,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-7259442962022681924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968215834717499276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2994817ae8baa6b40b5a827aa9654fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerType: 1
 --- !u!1 &2291652105064177661
 GameObject:
   m_ObjectHideFlags: 0
