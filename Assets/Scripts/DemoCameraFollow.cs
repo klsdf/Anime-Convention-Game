@@ -136,4 +136,9 @@ public class DemoCameraFollow : MonoBehaviour
 
         transform.position = new Vector3(posX, posY, transform.position.z);
     }
+
+    public void SetBoundSprite(SpriteRenderer sprite)
+    {
+        boundSprite = sprite;
+    }
 }
