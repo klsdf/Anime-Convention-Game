@@ -19,22 +19,31 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-
+        setting = Resources.Load<SettingUI>("UI/SettingMenu");
     }
 
+    public bool isOpenSettingUI = false;
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (!setting.isOpen)
+            if (isOpenSettingUI == true)
+            {
+                isOpenSettingUI = false;    
+                setting.CloseSettingUI();
+            }
+            else
+            {
+                isOpenSettingUI = true;
                 setting.OpenSettingUI();
+            }
         }
     }
-    public void SettingUI(SettingUI settingUI)
-    {
-        setting = settingUI;
-        setting.gameObject.SetActive(false);
-    }
+    // public void SettingUI(SettingUI settingUI)
+    // {
+    //     setting = settingUI;
+    //     setting.gameObject.SetActive(false);
+    // }
     /// <summary>
     /// 添加音乐播放器
     /// </summary>

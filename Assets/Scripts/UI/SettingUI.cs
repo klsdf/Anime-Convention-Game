@@ -6,71 +6,77 @@ using UnityEngine.UI;
 public class SettingUI : MonoBehaviour
 {
     public bool isOpen = false;
-    public Slider mainVolume;//×ÜÒôÁ¿
-    public Slider bgmVolume;//ÒôÀÖÒôÁ¿
-    public Slider soundEffectVolume;//ÒôĞ§ÒôÁ¿
-    public Button reduceMainBtn, addMainBtn;//×ÜÒôÁ¿Ôö¼õ°´Å¥
-    public Button reduceBgmBtn, addBgmBtn;//ÒôÀÖÒôÁ¿Ôö¼õ°´Å¥
-    public Button reduceSundEffectBtn, addSundEffectBtn;//ÒôĞ§ÒôÁ¿Ôö¼õ°´Å¥
+    public Slider mainVolume;//æ€»éŸ³é‡
+    public Slider bgmVolume;//éŸ³ä¹éŸ³é‡
+    public Slider soundEffectVolume;//éŸ³æ•ˆéŸ³é‡
+    public Button reduceMainBtn, addMainBtn;//æ€»éŸ³é‡å¢å‡æŒ‰é’®
+    public Button reduceBgmBtn, addBgmBtn;//éŸ³ä¹éŸ³é‡å¢å‡æŒ‰é’®
+    public Button reduceSundEffectBtn, addSundEffectBtn;//éŸ³æ•ˆéŸ³é‡å¢å‡æŒ‰é’®
     // Start is called before the first frame update
     void Start()
     {
-        //×ÜÒôÁ¿¿ØÖÆÏà¹Ø
+        //æ€»éŸ³é‡æ§åˆ¶ç›¸å…³
         mainVolume.onValueChanged.AddListener(MainVelumeChange);
         reduceMainBtn.onClick.AddListener(() => { ChangeMainVelume(mainVolume, -0.1f); });
         addMainBtn.onClick.AddListener(() => { ChangeMainVelume(mainVolume, 0.1f); });
-        //ÒôÀÖÒôÁ¿¿ØÖÆÏà¹Ø
+        //éŸ³ä¹éŸ³é‡æ§åˆ¶ç›¸å…³
         bgmVolume.onValueChanged.AddListener(BGMVelumeChange);
         reduceBgmBtn.onClick.AddListener(() => { ChangeMainVelume(bgmVolume, -0.1f); });
         addBgmBtn.onClick.AddListener(() => { ChangeMainVelume(bgmVolume, 0.1f); });
-        //ÒôĞ§ÒôÁ¿¿ØÖÆÏà¹Ø
+        //éŸ³æ•ˆéŸ³é‡æ§åˆ¶ç›¸å…³
         soundEffectVolume.onValueChanged.AddListener(SoundEffectVelumeChange);
         reduceSundEffectBtn.onClick.AddListener(() => { ChangeMainVelume(soundEffectVolume, -0.1f); });
         addSundEffectBtn.onClick.AddListener(() => { ChangeMainVelume(soundEffectVolume, 0.1f); });
 
-        GameManager.Instance.SettingUI(this);
+        // GameManager.Instance.SettingUI(this);
     }
 
     private void ChangeMainVelume(Slider velumeScrollbar, float value)
     {
         velumeScrollbar.value += value;
     }
-    //×ÜÒôÁ¿¿ØÖÆ
+    //æ€»éŸ³é‡æ§åˆ¶
     private void MainVelumeChange(float volumeStrong)
     {
         GameManager.Instance.ChangeMainVolume(volumeStrong);
     }
-    //ÒôÀÖÒôÁ¿¿ØÖÆ
+    //éŸ³ä¹éŸ³é‡æ§åˆ¶
     private void BGMVelumeChange(float volumeStrong)
     {
         GameManager.Instance.ChangeBgmVolume(volumeStrong);
     }
-    //ÒôĞ§ÒôÁ¿¿ØÖÆ
+    //éŸ³æ•ˆéŸ³é‡æ§åˆ¶
     private void SoundEffectVelumeChange(float volumeStrong)
     {
         GameManager.Instance.ChangeSoundEffectVolume(volumeStrong);
     }
-    //´ò¿ªÉèÖÃ½çÃæ²¢³õÊ¼»¯
+    //æ‰“å¼€è®¾ç½®ç•Œé¢å¹¶åˆå§‹åŒ–
     public void OpenSettingUI()
     {
-        isOpen = true;
         this.gameObject.SetActive(true);
         GameManager.Instance.isDragingObject = true;
         mainVolume.value = GameManager.Instance.mainVolume;
         bgmVolume.value = GameManager.Instance.bgmVolume;
         soundEffectVolume.value = GameManager.Instance.soundEffectVolume;
     }
-    // Update is called once per frame
-    void Update()
+
+    public void CloseSettingUI()
     {
-        if (isOpen)
-        {
-            if (Input.GetKeyUp(KeyCode.Escape))
-            {
-                isOpen = false;
-                this.gameObject.SetActive(false);
-                GameManager.Instance.isDragingObject = true;
-            }
-        }
+        this.gameObject.SetActive(false);
+        GameManager.Instance.isDragingObject = true;
     }
+    
+    // Update is called once per frame
+    // void Update()
+    // {
+    //     if (isOpen)
+    //     {
+    //         if (Input.GetKeyUp(KeyCode.Escape))
+    //         {
+    //             isOpen = false;
+    //             this.gameObject.SetActive(false);
+    //             GameManager.Instance.isDragingObject = true;
+    //         }
+    //     }
+    // }
 }

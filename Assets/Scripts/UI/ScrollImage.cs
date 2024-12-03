@@ -9,7 +9,7 @@ public class ScrollImage : MonoBehaviour
     public float speed = 100f; // 滚动速度
     private RectTransform rectTransform;
     private float canvasWidth;
-    private bool movingLeft = true;
+    private bool movingLeft = false;
 
     void Start()
     {
@@ -26,8 +26,8 @@ public class ScrollImage : MonoBehaviour
             // 向左移动
             rectTransform.anchoredPosition += Vector2.left * speed * Time.deltaTime;
 
-            // 如果图片的右边缘到达 Canvas 的左边界，反向移动
-            if (rectTransform.anchoredPosition.x <= -(canvasWidth - imageWidth) / 2)
+            // 如果图片移动到最左边，改为向右移动
+            if (rectTransform.anchoredPosition.x <= -20f) // 可以根据需要调整这个值
             {
                 movingLeft = false;
             }
@@ -37,8 +37,8 @@ public class ScrollImage : MonoBehaviour
             // 向右移动
             rectTransform.anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
-            // 如果图片的左边缘到达 Canvas 的右边界，反向移动
-            if (rectTransform.anchoredPosition.x >= (canvasWidth - imageWidth) / 2)
+            // 如果图片移动到最右边，改为向左移动
+            if (rectTransform.anchoredPosition.x >= 20f) // 可以根据需要调整这个值
             {
                 movingLeft = true;
             }

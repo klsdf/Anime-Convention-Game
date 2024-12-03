@@ -19,42 +19,74 @@ public class DemoCameraFollow : MonoBehaviour
     
 
 
+    public SpriteRenderer boundSprite; // 新增：限制边界的 Sprite
+    
+    // 用于存储相机的移动限制
+    private float minX;
+    private float maxX;
+    private float minY;
+    private float maxY;
+
+
     private void Start()
     {
         mycamera = GetComponent<Camera>();
-        mycamera.orthographicSize = 4;
+        mycamera.orthographicSize = 3;
         //nowTarget = targets[index];
+        
+        if (boundSprite != null)
+        {
+            CalculateBounds();
+        }
     }
+
+    // 计算相机的移动边界
+    private void CalculateBounds()
+    {
+        float verticalSize = mycamera.orthographicSize;
+        float horizontalSize = verticalSize * Screen.width / Screen.height;
+
+        // 获取sprite的边界
+        float spriteWidth = boundSprite.bounds.size.x;
+        float spriteHeight = boundSprite.bounds.size.y;
+
+        // 计算相机可移动的最大范围
+        minX = boundSprite.transform.position.x - (spriteWidth/2 - horizontalSize);
+        maxX = boundSprite.transform.position.x + (spriteWidth/2 - horizontalSize);
+        minY = boundSprite.transform.position.y - (spriteHeight/2 - verticalSize);
+        maxY = boundSprite.transform.position.y + (spriteHeight/2 - verticalSize);
+    }
+
     public float dragSpeed = 20; // 拖动速度
 
     private Vector3 dragOrigin;
     private void Update()
     {
-        if (Input.GetMouseButtonDown(2)) // 检测鼠标中键按下
-        {
-            dragOrigin = Input.mousePosition; // 记录鼠标位置
-        }
+        // if (Input.GetMouseButtonDown(2)) // 检测鼠标中键按下
+        // {
+        //     dragOrigin = Input.mousePosition; // 记录鼠标位置
+        // }
 
-         if (Input.GetMouseButton(2)) // 检测鼠标中键持续按下
-        {
-            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin); // 计算鼠标移动的距离
+        //  if (Input.GetMouseButton(2)) // 检测鼠标中键持续按下
+        // {
+        //     Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin); // 计算鼠标移动的距离
 
-            Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0); // 计算摄像机移动的距离
+        //     Vector3 move = new Vector3(-pos.x * dragSpeed, -pos.y * dragSpeed, 0); // 计算摄像机移动的距离
 
-            transform.Translate(move, Space.Self); // 在摄像机的局部坐标系下移动
+        //     transform.Translate(move, Space.Self); // 在摄像机的局部坐标系下移动
 
-            dragOrigin = Input.mousePosition; // 更新鼠标位置
-        }
+        //     dragOrigin = Input.mousePosition; // 更新鼠标位置
+        // }
 
 
-        if (Input.GetKey(KeyCode.LeftBracket))
-        {
-            mycamera.orthographicSize -= 0.1f;
-        }
-        else if (Input.GetKey(KeyCode.RightBracket))
-        {
-            mycamera.orthographicSize += 0.1f;
-        }
+        // if (Input.GetKey(KeyCode.LeftBracket))
+        // {
+        //     mycamera.orthographicSize -= 0.1f;
+        // }
+        // else if (Input.GetKey(KeyCode.RightBracket))
+        // {
+        //     mycamera.orthographicSize += 0.1f;
+        // }
 
         //if (Input.GetKeyDown(KeyCode.Q))
         //{
@@ -69,7 +101,7 @@ public class DemoCameraFollow : MonoBehaviour
         //当按下[时，相机缩小，当按下]时，相机放大
         // if (Input.GetKeyDown(KeyCode.LeftBracket))
 
-        CheckMouseScroll();
+        // CheckMouseScroll();
     }
 
     public float zoomSpeed = 20f; // 缩放速度
@@ -86,15 +118,20 @@ public class DemoCameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (nowTarget == null) return;
+
         var posX = Mathf.SmoothDamp(transform.position.x, nowTarget.position.x, ref velocityX, smoothTime);
-        var posY = transform.position.y;
-        if (nowTarget.transform.position.y > yThreshold)
+        var posY = Mathf.SmoothDamp(transform.position.y, nowTarget.position.y, ref velocityY, smoothTime);
+
+        // 如果设置了边界sprite，则限制相机位置
+        if (boundSprite != null)
         {
-             posY = Mathf.SmoothDamp(transform.position.y, nowTarget.position.y, ref velocityY, smoothTime);
-        }
-        else
-        {
-            posY = Mathf.SmoothDamp(transform.position.y, yThreshold, ref velocityY, smoothTime);
+            // 重新计算边界（因为正交大小可能会改变）
+            CalculateBounds();
+            
+            // 限制相机位置在边界内
+            posX = Mathf.Clamp(posX, minX, maxX);
+            posY = Mathf.Clamp(posY, minY, maxY);
         }
 
         transform.position = new Vector3(posX, posY, transform.position.z);

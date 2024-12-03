@@ -15,15 +15,15 @@ public class DemoCharacterController : MonoBehaviour
     public Transform interactTips;
 
     private Rigidbody2D rb;
-    //private Collision coll;
-    //private AnimationScript anim;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //coll = GetComponent<Collision>();
-        //anim = GetComponentInChildren<AnimationScript>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     public float jumpHeight = 1f; // 跳跃的高度
@@ -35,27 +35,27 @@ public class DemoCharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
         var dir = new Vector2(x, y);
-
-        //anim.SetHorizontalMovement(x, y, rb.velocity.y);
-
-
-
-
 
         Walk(dir);
 
         if (x > 0)
         {
             side = 1;
-            //anim.Flip(side);
+            spriteRenderer.flipX = false;
+            animator.SetBool("isRun", true);
         }
         if (x < 0)
         {
             side = -1;
-            //anim.Flip(side);
+            spriteRenderer.flipX = true;
+            animator.SetBool("isRun", true);
+        }
+        if (x == 0)
+        {
+            animator.SetBool("isRun", false);
         }
 
         if (Input.GetButtonDown("Jump") && !isJumping)
