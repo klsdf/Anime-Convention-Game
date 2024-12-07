@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Portal : MonoBehaviour
+public class Portal : InteractObjBase
 {
     [Header("传送设置")]
     public Transform destinationPoint; // 传送目标点
@@ -21,6 +21,10 @@ public class Portal : MonoBehaviour
     public bool fadeEffect = false;     // 是否使用渐变效果
     public ParticleSystem teleportEffect; // 可选的传送特效
 
+
+
+    private GameObject player;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!canTeleport || destinationPoint == null) return;
@@ -28,25 +32,20 @@ public class Portal : MonoBehaviour
         // 检查是否是玩家
         if (other.CompareTag("Player"))
         {
-            TeleportPlayer(other.gameObject);
+            // TeleportPlayer(other.gameObject);
+            player = other.gameObject;
+            other.GetComponent<DemoCharacterController>().SetInteractObject(this.gameObject);
         }
     }
 
-    private void TeleportPlayer(GameObject player)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (teleportEffect != null)
+        if (other.CompareTag("Player"))
         {
-            teleportEffect.Play();
+            other.GetComponent<DemoCharacterController>().ClearInteractObject();
         }
-
-        // 立即传送
-        player.transform.position = destinationPoint.position;
-
-        // 暂时禁用传送门以防止连续传送
-        canTeleport = false;
-        Invoke("EnableTeleport", teleportDelay);
-        cameraFollow.SetBoundSprite(boundSprite);
     }
+
 
     private void EnableTeleport()
     {
@@ -60,9 +59,23 @@ public class Portal : MonoBehaviour
         boundSprite = GameObject.Find("室内").GetComponent<SpriteRenderer>();
     }
 
-    
-    void Update()
+    public override void Interact()
     {
-        
+        TeleportPlayer(player);
+    }
+     private void TeleportPlayer(GameObject player)
+    {
+        if (teleportEffect != null)
+        {
+            teleportEffect.Play();
+        }
+
+        // 立即传送
+        player.transform.position = destinationPoint.position;
+
+        // 暂时禁用传送门以防止连续传送
+        canTeleport = false;
+        Invoke("EnableTeleport", teleportDelay);
+        cameraFollow.SetBoundSprite(boundSprite);
     }
 }

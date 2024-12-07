@@ -12,7 +12,7 @@ public class DemoCharacterController : MonoBehaviour
 
 
     [Header("Interact")]
-    public Transform interactTips;
+    public GameObject interactTips;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -31,6 +31,38 @@ public class DemoCharacterController : MonoBehaviour
 
     private bool isJumping = false; // 标记角色是否正在跳跃
     private Vector3 originalPosition; // 角色原始位置
+
+
+
+    private bool canInteract = false;
+    private GameObject interactObject;
+    public void SetInteractObject(GameObject obj)
+    {
+        // print("SetInteractObject");
+        interactObject = obj;
+        canInteract = true;
+        interactTips.SetActive(true);
+    }
+    public void ClearInteractObject()
+    {
+        interactObject = null;
+        canInteract = false;
+        interactTips.SetActive(false);
+    }
+
+    private void CheckInteract()
+    {
+        if (canInteract)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                interactObject.GetComponent<InteractObjBase>().Interact();
+            }
+        }else
+        {
+           
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -63,16 +95,12 @@ public class DemoCharacterController : MonoBehaviour
             originalPosition = transform.position;
             StartCoroutine(Jump());
         }
+        CheckInteract();
     }
 
     private void Walk(Vector2 dir)
     {
-
-
         rb.velocity = new Vector2(dir.x * speed, dir.y * speed);
-
-
-
     }
 
 

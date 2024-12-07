@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SettingUI : MonoBehaviour
 {
-    public bool isOpen = false;
+    // public bool isOpen = false;
 //     public Slider mainVolume;//总音量
 //     public Slider bgmVolume;//音乐音量
 //     public Slider soundEffectVolume;//音效音量
