@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingUI : MonoBehaviour
+public class SettingPanel : MonoBehaviour
 {
+    public Button closeBtn;
+
+    private void Awake() {
+        closeBtn.onClick.AddListener(CloseSettingPanel);
+    }
+
+    private void CloseSettingPanel() {
+        UIController.Instance.ShowPanel(PanelType.Pause);
+    }
+
+    
     // public bool isOpen = false;
 //     public Slider mainVolume;//总音量
 //     public Slider bgmVolume;//音乐音量

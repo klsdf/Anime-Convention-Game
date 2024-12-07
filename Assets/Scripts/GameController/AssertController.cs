@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 public enum AssertType
 {
     Item1,
@@ -61,7 +62,8 @@ public class AssertController : Singleton<AssertController>
 
     
 
-    // 保存解锁状态到json
+      // 保存解锁状态到json
+    [Sirenix.OdinInspector.Button("保存道具状态")]
     private void SaveUnlockedItems()
     {
         Debug.Log("保存成功");
@@ -71,6 +73,7 @@ public class AssertController : Singleton<AssertController>
     }
 
     // 从json加载解锁状态
+    [Sirenix.OdinInspector.Button("加载道具状态")]
     private void LoadUnlockedItems()
     {
         if (PlayerPrefs.HasKey("UnlockedItems"))

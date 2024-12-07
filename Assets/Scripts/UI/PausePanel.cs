@@ -17,15 +17,13 @@ public class PausePanel : MonoBehaviour
         quitBtn.onClick.AddListener(QuitGame);
     }
     private void ResumeGame() {
-        Time.timeScale = 1;
-        gameObject.SetActive(false);
+        UIController.Instance.ShowPanel(PanelType.Item );
     }
     private void OpenSettingPanel() {
-        GameObject settingUI = Instantiate(Resources.Load<GameObject>("UI/SettingMenu"));
-        settingUI.transform.SetParent(GameObject.Find("Canvas").transform);
+        UIController.Instance.ShowPanel(PanelType.Setting);
     }
     private void GetAssert() {
-        SceneManager.LoadScene("GetAssert");
+        UIController.Instance.ShowPanel(PanelType.Assert);
     }
     private void QuitGame() {
         SceneManager.LoadScene("StartScene");
