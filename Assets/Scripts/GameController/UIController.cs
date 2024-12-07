@@ -1,3 +1,6 @@
+//作者：闫辰祥
+//创建时间: 2024年12月7日
+
 using UnityEngine;
 
 public enum PanelType
@@ -29,6 +32,7 @@ public class UIController : Singleton<UIController>
         itemPanel.SetActive(panelType == PanelType.Item);
         pausePanel.SetActive(panelType == PanelType.Pause);
         settingPanel.SetActive(panelType == PanelType.Setting);
+        AudioPlayerController.Instance.PlayAudio(SoundType.ButtonSE);
     }
 
     private void Update()
