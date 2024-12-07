@@ -12,7 +12,7 @@ using UnityEngine.Events;
 /// <summary>
 /// 控制游戏一开始的主菜单
 /// </summary>
-public class MainMenuController : MonoBehaviour
+public class MainMenuPanel : MonoBehaviour
 {
     public Button startGameBtn;
     // public Button beingAssertBtn;
@@ -32,7 +32,7 @@ public class MainMenuController : MonoBehaviour
     public void StartGame()
     {
         PlaySE();
-        SceneManager.LoadScene("TopDown");
+        SceneManager.LoadScene("Game");
     }
     // public void BeingAssert()
     // {
