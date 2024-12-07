@@ -19,12 +19,18 @@ public class UIManager : MonoBehaviour
     {
 
     }
+    private void PlaySE()
+    {
+        AudioPlayerController.Instance.PlayAudio(SoundType.ButtonSE);
+    }
     public void StartGame()
     {
+        PlaySE();
         SceneManager.LoadScene("TopDown");
     }
     public void BeingAssert()
     {
+        PlaySE();
         SceneManager.LoadScene("GetAssert");
     }
 }

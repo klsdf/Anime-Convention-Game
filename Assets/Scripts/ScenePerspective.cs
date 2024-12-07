@@ -150,9 +150,9 @@ public class ScenePerspective : MonoBehaviour
 
 
         float playerT = TFromPointToBezier(playerObj.objTransform.position);
-        float point1T = 0;
+        // float point1T = 0;
         float point2T = TFromPointToBezier(secondChildObject.position);
-        float point3T = 1;
+        // float point3T = 1;
         // print(point2T);
         if (playerT < point2T)
         {
