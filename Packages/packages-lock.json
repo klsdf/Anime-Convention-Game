@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.demigiant.dotween": {
+      "version": "file:Demigiant",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "9.1.2",
       "depth": 1,

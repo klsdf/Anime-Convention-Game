@@ -9,7 +9,7 @@ public enum AudioPlayerType
 
 public class AudioPlayerManager : MonoBehaviour
 {
-    //ÒôÁ¿²¥·ÅÆ÷
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public AudioPlayerType playerType;
     private AudioSource thisPlayer;
     // Start is called before the first frame update
@@ -20,14 +20,8 @@ public class AudioPlayerManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnDestroy()
     {
-        GameManager.Instance.RemoveAudioPlayer(thisPlayer, playerType);
+        GameManager.Instance?.RemoveAudioPlayer(thisPlayer, playerType);
     }
 }
