@@ -35,8 +35,16 @@ public class AssertController : Singleton<AssertController>
         LoadUnlockedItems();
     }
 
+
+    public void UnlockItem(string itemType)
+    {
+        if (System.Enum.TryParse(itemType, out AssertType type))
+        {
+            UnlockItem(type);
+        }
+    }
     // 解锁道具
-    public void UnlockItem(AssertType itemId)
+    private void UnlockItem(AssertType itemId)
     {
         var item = assertItems.Find(x => x.assertType == itemId);
         if (item != null)

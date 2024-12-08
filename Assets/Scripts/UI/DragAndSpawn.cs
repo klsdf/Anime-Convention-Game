@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using TMPro;
 public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public GameObject itemPrefab; // 要生成的物体预制件
@@ -11,6 +11,7 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Image icon;
     private Vector2 offset; // 新增：用于存储鼠标点击位置与物体位置的偏移
     private Vector2 startAnchoredPos; // 改用 Vector2 存储锚点位置
+    public TMP_Text text;
 
     public void Init(AssertItem item)
     {
@@ -19,6 +20,7 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             icon.sprite = item.icon;
         }
         itemPrefab = item.prefab;
+        text.text = item.assertType.ToString();
     }
 
     private void Awake()

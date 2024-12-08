@@ -90,7 +90,9 @@ public class QRCode : MonoBehaviour
 
         if (tResult != null)
         {
+            Debug.Log("识别到二维码");
             Debug.Log(tResult.Text);
+            AssertController.Instance.UnlockItem(tResult.Text);
             ShiBeiResult.text = tResult.Text;
         }
     }
