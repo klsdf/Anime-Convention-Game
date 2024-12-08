@@ -16,4 +16,5 @@ public class AssertPanel : MonoBehaviour
     {
         UIController.Instance.ShowPanel(PanelType.Item);
     }
+
 }

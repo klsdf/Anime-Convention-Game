@@ -4,11 +4,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using System.Runtime.CompilerServices;
 public enum AssertType
 {
-    Item1,
-    Item2,
-    Item3
+    飞船,
+    传送门,
+    书,
+    星星,
+    音乐,
+    灯
 }
 
 [System.Serializable]
@@ -16,6 +20,8 @@ public class AssertItem
 {
     public AssertType assertType;
     public bool isUnlocked;
+    public Sprite icon;
+    public GameObject prefab;
 }
 
 public class AssertController : Singleton<AssertController>
@@ -57,7 +63,10 @@ public class AssertController : Singleton<AssertController>
         return false;
     }
 
-    // 获取所有已解锁道具
+    /// <summary>
+    /// 获取所有已解锁道具
+    /// </summary>
+    /// <returns> 所有已解锁道具 </returns>
     public List<AssertItem> GetAllUnlockedItems()
     {
         return assertItems.FindAll(x => x.isUnlocked);
