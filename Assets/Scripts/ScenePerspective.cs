@@ -64,7 +64,7 @@ public class ScenePerspective : MonoBehaviour
             if (scaleObj.objTransform.gameObject.GetComponent<DemoCharacterController>() != null)
             {
                 playerController = scaleObj.objTransform.gameObject.GetComponent<DemoCharacterController>();
-                playerSpeed = playerController.speed;
+                playerSpeed = playerController.moveSpeed;
             }
 
         }
@@ -168,7 +168,7 @@ public class ScenePerspective : MonoBehaviour
 
         playerObj.objTransform.localScale = new Vector3(playerObj.originScale.x * scaleSize, playerObj.originScale.y * scaleSize, playerObj.originScale.z * scaleSize);
 
-        playerController.speed = playerSpeed *scaleSize;
+        playerController.moveSpeed = playerSpeed *scaleSize;
         
 
 

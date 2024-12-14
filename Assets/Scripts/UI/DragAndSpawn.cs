@@ -2,15 +2,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+
+/// <summary>
+/// 处理物品的拖拽和生成
+/// </summary>
 public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public GameObject itemPrefab; // 要生成的物体预制件
+    public GameObject itemPrefab;
 
     private RectTransform rectTransform;
-
     private Image icon;
-    private Vector2 offset; // 新增：用于存储鼠标点击位置与物体位置的偏移
-    private Vector2 startAnchoredPos; // 改用 Vector2 存储锚点位置
+    private Vector2 offset;
+    private Vector2 startAnchoredPos;
     public TMP_Text text;
 
     public void Init(AssertItem item)
@@ -27,19 +30,17 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         rectTransform = GetComponent<RectTransform>();
         icon = GetComponent<Image>();
-        startAnchoredPos = rectTransform.anchoredPosition; // 保存初始锚点位置
+        startAnchoredPos = rectTransform.anchoredPosition;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         GameManager.Instance.isDragingObject = true;
-        // 使用 anchoredPosition
         offset = (Vector2)rectTransform.anchoredPosition - eventData.position;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // 使用 anchoredPosition
         rectTransform.anchoredPosition = eventData.position + offset;
     }
 
@@ -47,11 +48,23 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         GameManager.Instance.isDragingObject = false;
 
-        // 在拖拽结束的位置生成物体
-        Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f));
-        GameObject obj = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
+        // 获取当前场景对象
+        GameObject currentScene = SceneController.Instance.GetCurrentSceneObject();
+        if (currentScene != null)
+        {
+            // 计算生成位置
+            Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f));
+            
+            // 生成物体并设置父对象为当前场景
+            GameObject obj = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
+            obj.transform.SetParent(currentScene.transform);
+        }
+        else
+        {
+            Debug.LogWarning("No active scene found for spawning object");
+        }
         
-        // 重置到初始锚点位置
+        // 重置UI位置
         rectTransform.anchoredPosition = startAnchoredPos;
     }
 }

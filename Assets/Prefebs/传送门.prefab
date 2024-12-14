@@ -156,6 +156,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b334ea016a60445adccd6af4866045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetScene: 1
+  portalOffset: {x: 1, y: 0}
+  teleportDelay: 0.1
+  canTeleport: 1
+  fadeEffect: 0
+  teleportEffect: {fileID: 0}
 --- !u!1 &4587733008069905293
 GameObject:
   m_ObjectHideFlags: 0

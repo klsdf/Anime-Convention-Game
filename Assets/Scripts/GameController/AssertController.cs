@@ -11,8 +11,11 @@ public enum AssertType
     传送门,
     书,
     星星,
+    星星2,
     音乐,
-    灯
+    灯,
+    小雨,
+    大雨
 }
 
 [System.Serializable]

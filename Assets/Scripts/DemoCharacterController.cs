@@ -3,146 +3,196 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// 角色控制器，处理玩家的移动、跳跃和交互等行为
+/// </summary>
 public class DemoCharacterController : MonoBehaviour
 {
-    [Header("Movement")]
-    public float speed = 10f;
+    [Header("Movement Settings")]
+    [Tooltip("角色移动速度")]
+    public float moveSpeed = 10f;
+    [Tooltip("角色朝向（1为右，-1为左）")]
+    public int facingDirection = 1;
 
-    public int side = 1;
+    [Header("Jump Settings")]
+    [Tooltip("跳跃高度")]
+    public float jumpHeight = 1f;
+    [Tooltip("跳跃持续时间")]
+    public float jumpDuration = 0.5f;
 
+    [Header("Interaction")]
+    [Tooltip("交互提示UI")]
+    public GameObject interactionTips;
 
-    [Header("Interact")]
-    public GameObject interactTips;
+    [Header("Audio")]
+    [Tooltip("是否启用脚步声")]
+    [SerializeField] private bool enableFootstepSound = true;
+    private AudioSource footstepAudioSource;
 
-    private Rigidbody2D rb;
+    // 组件引用
+    private Rigidbody2D rigidBody;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private Camera mainCamera;
 
-    // Start is called before the first frame update
-    void Start()
+    // 状态标记
+    private bool isJumping = false;
+    private bool isMoving = false;
+    private bool canInteract = false;
+    private Vector3 jumpStartPosition;
+    private GameObject currentInteractable;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        // 获取组件引用
+        rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        mainCamera = Camera.main;
+
+        // 初始化脚步声
+        InitializeFootstepAudio();
     }
 
-    public float jumpHeight = 1f; // 跳跃的高度
-    public float jumpTime = 0.5f; // 跳跃的时间
-
-    private bool isJumping = false; // 标记角色是否正在跳跃
-    private Vector3 originalPosition; // 角色原始位置
-
-
-
-    private bool canInteract = false;
-    private GameObject interactObject;
-    public void SetInteractObject(GameObject obj)
+    private void InitializeFootstepAudio()
     {
-        // print("SetInteractObject");
-        interactObject = obj;
-        canInteract = true;
-        interactTips.SetActive(true);
-    }
-    public void ClearInteractObject()
-    {
-        interactObject = null;
-        canInteract = false;
-        interactTips.SetActive(false);
-    }
-
-    private void CheckInteract()
-    {
-        if (canInteract)
+        footstepAudioSource = gameObject.AddComponent<AudioSource>();
+        footstepAudioSource.loop = true;
+        footstepAudioSource.playOnAwake = false;
+        var footstepClip = AudioPlayerController.Instance.GetAudioClip(SoundType.Footstep);
+        if (footstepClip != null)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                interactObject.GetComponent<InteractObjBase>().Interact();
-            }
-        }else
-        {
-           
+            footstepAudioSource.clip = footstepClip;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// 设置可交互对象
+    /// </summary>
+    public void SetInteractObject(GameObject obj)
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        var dir = new Vector2(x, y);
+        currentInteractable = obj;
+        canInteract = true;
+        interactionTips.SetActive(true);
+    }
 
-        Walk(dir);
+    /// <summary>
+    /// 清除当前交互对象
+    /// </summary>
+    public void ClearInteractObject()
+    {
+        currentInteractable = null;
+        canInteract = false;
+        interactionTips.SetActive(false);
+    }
 
-        if (x > 0)
+    private void Update()
+    {
+        // 获取输入
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 moveDirection = new Vector2(horizontalInput, verticalInput);
+
+        // 检测是否在移动
+        isMoving = (moveDirection != Vector2.zero) && !isJumping;
+        
+        // 处理移动
+        HandleMovement(moveDirection);
+        // 处理动画
+        UpdateAnimation(horizontalInput);
+        // 处理脚步声
+        UpdateFootstepSound();
+        // 处理交互
+        HandleInteraction();
+
+        // 处理跳跃
+        if (Input.GetButtonDown("Jump") && !isJumping)
         {
-            side = 1;
+            jumpStartPosition = transform.position;
+            StartCoroutine(PerformJump());
+        }
+    }
+
+    private void HandleMovement(Vector2 direction)
+    {
+        rigidBody.velocity = direction * moveSpeed;
+    }
+
+    private void UpdateAnimation(float horizontalInput)
+    {
+        if (horizontalInput > 0)
+        {
+            facingDirection = 1;
             spriteRenderer.flipX = false;
             animator.SetBool("isRun", true);
         }
-        if (x < 0)
+        else if (horizontalInput < 0)
         {
-            side = -1;
+            facingDirection = -1;
             spriteRenderer.flipX = true;
             animator.SetBool("isRun", true);
         }
-        if (x == 0)
+        else
         {
             animator.SetBool("isRun", false);
         }
-
-        if (Input.GetButtonDown("Jump") && !isJumping)
-        {
-            originalPosition = transform.position;
-            StartCoroutine(Jump());
-        }
-        CheckInteract();
     }
 
-    private void Walk(Vector2 dir)
+    private void UpdateFootstepSound()
     {
-        rb.velocity = new Vector2(dir.x * speed, dir.y * speed);
+        if (!enableFootstepSound) return;
+        
+        if (isMoving && !footstepAudioSource.isPlaying)
+        {
+            footstepAudioSource.Play();
+        }
+        else if (!isMoving && footstepAudioSource.isPlaying)
+        {
+            footstepAudioSource.Stop();
+        }
     }
 
+    private void HandleInteraction()
+    {
+        if (canInteract && Input.GetKeyDown(KeyCode.E))
+        {
+            currentInteractable.GetComponent<InteractObjBase>().Interact();
+        }
+    }
 
-    IEnumerator Jump()
+    private System.Collections.IEnumerator PerformJump()
     {
         isJumping = true;
-        float timer = 0;
+        float elapsedTime = 0;
 
-        while (timer <= jumpTime)
+        while (elapsedTime <= jumpDuration)
         {
-            timer += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
 
-            Vector3 newPosition = originalPosition;
-            float y = Mathf.Sin((Mathf.PI / jumpTime) * timer);
-            newPosition.y += jumpHeight * y;
+            // 计算跳跃高度
+            float jumpProgress = (Mathf.PI / jumpDuration) * elapsedTime;
+            float heightOffset = jumpHeight * Mathf.Sin(jumpProgress);
+            Vector3 newPosition = jumpStartPosition;
+            newPosition.y += heightOffset;
 
-            //当下落时才进行跳板的检测
-            if (timer > jumpTime / 2)
+            // 检测地面碰撞
+            if (elapsedTime > jumpDuration / 2)
             {
                 RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, -Vector2.up, 0.5f, LayerMask.GetMask("Ground"));
                 foreach (RaycastHit2D hit in hits)
                 {
-                    // print("无敌");
                     if (hit.collider != null)
                     {
-                        Debug.Log("Ground Detected!");
-                        timer = 2 * jumpTime;//遇到跳板时，把跳跃中止。
-
+                        elapsedTime = jumpDuration * 2; // 提前结束跳跃
+                        break;
                     }
                 }
             }
 
-            // 更新角色的位置
             transform.position = new Vector3(transform.position.x, newPosition.y, transform.position.z);
-
-
             yield return null;
         }
 
-        // 重置角色的位置和跳跃状态
-        // transform.position = originalPosition;
         isJumping = false;
     }
-
 }
