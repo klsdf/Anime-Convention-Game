@@ -32,6 +32,8 @@ public class AudioDictionary
     public SoundType key;
     /// <summary>对应的音频片段</summary>
     public AudioClip value;
+    /// <summary>音量</summary>
+    public float volume = 1.0f;
 }
 
 /// <summary>
@@ -129,6 +131,7 @@ public class AudioPlayerController : Singleton<AudioPlayerController>
         if (audioData != null && audioData.value != null)
         {
             audioPlayers[currentPlayerIndex].clip = audioData.value;
+            audioPlayers[currentPlayerIndex].volume = audioData.volume;
             audioPlayers[currentPlayerIndex].Play();
         }
         else

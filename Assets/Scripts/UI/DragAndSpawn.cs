@@ -18,10 +18,23 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void Init(AssertItem item)
     {
+        if (item == null)
+        {
+            Debug.LogError("AssertItem is null");
+            return;
+        }
+
         if (item.icon != null)
         {
             icon.sprite = item.icon;
         }
+
+        if (item.prefab == null)
+        {
+            Debug.LogError("Prefab is null in AssertItem");
+            return;
+        }
+
         itemPrefab = item.prefab;
         text.text = item.assertType.ToString();
     }
@@ -50,18 +63,25 @@ public class DragAndSpawn : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         // 获取当前场景对象
         GameObject currentScene = SceneController.Instance.GetCurrentSceneObject();
-        if (currentScene != null)
+        if (currentScene != null && itemPrefab != null)
         {
             // 计算生成位置
             Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f));
             
             // 生成物体并设置父对象为当前场景
             GameObject obj = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
-            obj.transform.SetParent(currentScene.transform);
+            if (obj != null)
+            {
+                obj.transform.SetParent(currentScene.transform);
+            }
+            else
+            {
+                Debug.LogError("Failed to instantiate object");
+            }
         }
         else
         {
-            Debug.LogWarning("No active scene found for spawning object");
+            Debug.LogWarning("No active scene found or itemPrefab is null");
         }
         
         // 重置UI位置

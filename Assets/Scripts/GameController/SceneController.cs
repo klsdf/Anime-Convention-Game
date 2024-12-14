@@ -7,7 +7,8 @@ using UnityEngine;
 public enum SceneType
 {
     City,
-    CyberCity
+    CyberCity,
+    pixelHouse
 }
 
 [System.Serializable]
@@ -29,6 +30,11 @@ public class SceneController : Singleton<SceneController>
     {
         mainCamera = Camera.main.GetComponent<DemoCameraFollow>();
         currentSceneObject = sceneObjects.Find(x => x.sceneType == SceneType.City);
+
+        foreach (var sceneObject in sceneObjects)
+        {
+            sceneObject.sceneObject.SetActive(sceneObject == currentSceneObject);
+        }
     }
 
     /// <summary>

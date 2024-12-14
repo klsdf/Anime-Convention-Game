@@ -15,7 +15,10 @@ public enum AssertType
     音乐,
     灯,
     小雨,
-    大雨
+    大雨,
+    传送门2
+
+
 }
 
 [System.Serializable]
@@ -80,7 +83,18 @@ public class AssertController : Singleton<AssertController>
     /// <returns> 所有已解锁道具 </returns>
     public List<AssertItem> GetAllUnlockedItems()
     {
-        return assertItems.FindAll(x => x.isUnlocked);
+        var items = assertItems.FindAll(x => x.isUnlocked);
+    
+        // 验证每个物品
+        foreach (var item in items)
+        {
+            if (item.prefab == null)
+            {
+                Debug.LogError($"Item {item.assertType} has no prefab assigned!");
+            }
+        }
+    
+        return items;
     }
 
     
