@@ -11,4 +11,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GetAssert.unity
     guid: a1bc2634631cd62468fd7529fa96bd00
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 7100b6b89cfa2d94483bea4db1da0b49, type: 2}
