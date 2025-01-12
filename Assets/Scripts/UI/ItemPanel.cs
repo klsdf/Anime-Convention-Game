@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 
 public class ItemPanel : MonoBehaviour {
-    
-
     private void OnEnable() {
         List<AssertItem> items = AssertController.Instance.GetAllUnlockedItems();
         foreach (AssertItem item in items)
