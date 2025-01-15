@@ -7,6 +7,23 @@ public class InteractObjBase : MonoBehaviour
 {
     public virtual void Interact()
     {
-        Debug.Log("Interact");
+
+    }
+
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<DemoCharacterController>().SetInteractObject(this.gameObject);
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<DemoCharacterController>().ClearInteractObject();
+        }
     }
 }
