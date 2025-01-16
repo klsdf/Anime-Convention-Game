@@ -1,8 +1,8 @@
 /*************************************************
- * ��Ŀ���ƣ�Unityʵ����������ͷɨ�������ɶ�ά��
- * �ű������ˣ�ħ��
- * �ű�����ʱ�䣺2017.12.20
- * �ű����ܣ���ά��ʶ�����ɿ�����
+ * 项目名称：Unity实现的摄像头扫描和二维码识别
+ * 脚本作者：魔术师
+ * 脚本创建时间：2017.12.20
+ * 脚本功能：二维码识别和生成
  * ***********************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -72,12 +72,12 @@ public class WebCamTextureTest : MonoBehaviour
         WebCamDevice[] devices = WebCamTexture.devices;    // 获取所有摄像头
         if (devices.Length == 0)
         {
-            Debug.LogError("No webcam devices found!");
+            Debug.LogError("未找到摄像头设备！");
             return;
         }
 
         string deviceName = devices[0].name;  // 获取第一个摄像头
-        webCamTexture = new WebCamTexture(deviceName, 400, 300); // 宽度,高度
+        webCamTexture = new WebCamTexture(deviceName, 400, 300); // 设置宽度和高度
         cameraTextureDisplay.texture = webCamTexture;   // 设置图像显示
         webCamTexture.Play();  // 开始实时显示
 
