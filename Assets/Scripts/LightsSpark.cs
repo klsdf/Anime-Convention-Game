@@ -3,24 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// 灯光渐变控制器
+/// 实现灯光强度的平滑渐变效果
+/// </summary>
 public class LightSpark : MonoBehaviour
 {
+    /// <summary>
+    /// 灯光变化速度
+    /// </summary>
+    public float changeSpeed = 0.0001f;
 
-    public float changeSpeed = 0.0001f; // 灯光变化速度
+    /// <summary>
+    /// 灯光组件引用
+    /// </summary>
     private Light2D lightSource;
 
-
+    /// <summary>
+    /// 初始化组件引用
+    /// </summary>
     private void Start()
     {
         lightSource = GetComponent<Light2D>();
     }
 
+    /// <summary>
+    /// 更新灯光强度
+    /// </summary>
     private void Update()
     {
-        // 计算新的强度值
         float newIntensity = lightSource.intensity + changeSpeed;
 
-        // 如果新的强度值超过了最大值或最小值，反转变化的方向
         if (newIntensity > 1f || newIntensity < 0.3f)
         {
             changeSpeed = -changeSpeed;

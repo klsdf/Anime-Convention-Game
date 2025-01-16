@@ -5,17 +5,60 @@ using UnityEngine.EventSystems;
 //作者：闫辰祥
 //创建时间: 2024年8月12日
 
+/// <summary>
+/// 相机拖拽控制器
+/// 实现相机的拖拽移动功能
+/// </summary>
 public class CameraDrag : MonoBehaviour
 {
-    public float dragSpeed = 0.1f; // 拖动速度
-    public float zoomSpeed = 0.5f; // 缩放速度
-    public float minZoom = 5f; // 最小缩放限制
-    public float maxZoom = 20f; // 最大缩放限制
+    /// <summary>
+    /// 相机移动速度
+    /// </summary>
+    [SerializeField]
+    private float moveSpeed = 5f;
 
-    private Vector3 dragOrigin; // 拖动起点
-    private bool isDragging = false; // 是否正在拖动
+    /// <summary>
+    /// 相机拖动速度
+    /// </summary>
+    public float dragSpeed = 0.1f;
 
-    void Update()
+    /// <summary>
+    /// 相机缩放速度
+    /// </summary>
+    public float zoomSpeed = 0.5f;
+
+    /// <summary>
+    /// 最小缩放限制
+    /// </summary>
+    public float minZoom = 5f;
+
+    /// <summary>
+    /// 最大缩放限制
+    /// </summary>
+    public float maxZoom = 20f;
+
+    /// <summary>
+    /// 拖动起始点
+    /// </summary>
+    private Vector3 dragOrigin;
+
+    /// <summary>
+    /// 是否正在拖动标志
+    /// </summary>
+    private bool isDragging = false;
+
+    /// <summary>
+    /// 初始化相机设置
+    /// </summary>
+    private void Start()
+    {
+        // 现有代码...
+    }
+
+    /// <summary>
+    /// 每帧更新相机位置
+    /// </summary>
+    private void Update()
     {
         // 检查是否点击在 UI 上
         if (GameManager.Instance.isDragingObject == true)
@@ -26,7 +69,20 @@ public class CameraDrag : MonoBehaviour
         HandleTouchInput();
     }
 
-    void HandleMouseInput()
+    /// <summary>
+    /// 处理相机拖拽移动
+    /// </summary>
+    /// <param name="dragDelta">拖拽位移向量</param>
+    private void HandleCameraDrag(Vector2 dragDelta)
+    {
+        // 现有代码...
+    }
+
+    /// <summary>
+    /// 处理鼠标输入
+    /// 包括鼠标拖动和滚轮缩放功能
+    /// </summary>
+    private void HandleMouseInput()
     {
         // 鼠标拖动输入
         if (Input.GetMouseButtonDown(0))
@@ -57,7 +113,11 @@ public class CameraDrag : MonoBehaviour
         }
     }
 
-    void HandleTouchInput()
+    /// <summary>
+    /// 处理触摸输入
+    /// 包括单指拖动和双指缩放功能
+    /// </summary>
+    private void HandleTouchInput()
     {
         if (Input.touchCount == 1)
         {
@@ -94,6 +154,10 @@ public class CameraDrag : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 检查指针是否在UI元素上
+    /// </summary>
+    /// <returns>如果指针在UI元素上返回true，否则返回false</returns>
     private bool IsPointerOverUIObject()
     {
         // 检测鼠标是否悬停在 UI 元素上

@@ -2,7 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-
+/// <summary>
+/// 昼夜系统
+/// 控制游戏中的昼夜循环和光照变化
+/// </summary>
 public class DayNightSystem : MonoBehaviour
 {
     private static DayNightSystem instance;
@@ -18,16 +21,40 @@ public class DayNightSystem : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 时间类型枚举
+    /// </summary>
     public enum TimeType 
     {
+        /// <summary>
+        /// 黎明
+        /// </summary>
         Dawn,
+        
+        /// <summary>
+        /// 白天
+        /// </summary>
         Day,
+        
+        /// <summary>
+        /// 正午
+        /// </summary>
         Noon,
+        
+        /// <summary>
+        /// 黄昏
+        /// </summary>
         Dusk,
+        
+        /// <summary>
+        /// 夜晚
+        /// </summary>
         Night,
+        
+        /// <summary>
+        /// 午夜
+        /// </summary>
         Midnight
-
     }
 
     private TimeType[] timeTypes = new TimeType[] { TimeType.Dawn, TimeType.Day, TimeType.Noon, TimeType.Dusk, TimeType.Night, TimeType.Midnight };
@@ -36,24 +63,49 @@ public class DayNightSystem : MonoBehaviour
     private TimeType lastTimeType;
     public TimeType timeType;
 
-
+    /// <summary>
+    /// 全局光照组件
+    /// </summary>
     public Light2D globalLight;
+
+    /// <summary>
+    /// 玩家光照组件
+    /// </summary>
     public Light2D playerLight;
 
+    /// <summary>
+    /// 过渡时间
+    /// </summary>
     private float duration = 2.0f;
 
+    /// <summary>
+    /// 是否正在变化中
+    /// </summary>
     private bool isChanging = false;
 
+    /// <summary>
+    /// 场景中的所有光源
+    /// </summary>
     public Light2D[] lights;
 
-
-
+    /// <summary>
+    /// 冷却时间
+    /// </summary>
     public float coolDown = 60.0f;
+
+    /// <summary>
+    /// 计时器
+    /// </summary>
     private float timer = 0;
+
     //让所有灯的亮度变为0
 
     //public GPTDialog gPTDialog;
 
+    /// <summary>
+    /// 设置所有灯光的强度
+    /// </summary>
+    /// <param name="value">灯光强度值</param>
     public void intensityOfAllLights(float value)
     {
         foreach (var light in lights)
@@ -62,8 +114,9 @@ public class DayNightSystem : MonoBehaviour
         }
     }
 
-
-    // Start is called before the first frame update
+    /// <summary>
+    /// 初始化昼夜系统
+    /// </summary>
     void Start()
     {
         timeType = TimeType.Day;
@@ -73,7 +126,9 @@ public class DayNightSystem : MonoBehaviour
         //changeTo(TimeType.Dawn);
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 更新昼夜系统状态
+    /// </summary>
     void Update()
     {
 
@@ -108,6 +163,11 @@ public class DayNightSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 切换到指定的时间类型
+    /// </summary>
+    /// <param name="timeType">目标时间类型</param>
+    /// <returns>协程迭代器</returns>
     IEnumerator changeTo(TimeType timeType)
     {
         isChanging = true;

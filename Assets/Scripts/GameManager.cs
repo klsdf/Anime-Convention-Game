@@ -4,25 +4,57 @@ using UnityEngine;
 //作者：闫辰祥
 //创建时间: 2024年8月12日
 
+/// <summary>
+/// 游戏管理器
+/// 管理游戏全局状态和音频系统
+/// </summary>
 public class GameManager : Singleton<GameManager>
 {
+    /// <summary>
+    /// 是否正在拖拽物体
+    /// </summary>
     public bool isDragingObject;
 
-    public float bgmVolume = 1;//音乐音量
-    public float soundEffectVolume = 1;//音效音量
-    public float mainVolume = 1;//总音量
+    /// <summary>
+    /// 背景音乐音量
+    /// </summary>
+    public float bgmVolume = 1;
 
-    private List<AudioSource> bgmAudioPlayer = new List<AudioSource>();//音乐播放器
-    private List<AudioSource> soundEffectAudioPlayer = new List<AudioSource>();//音效播放器
+    /// <summary>
+    /// 音效音量
+    /// </summary>
+    public float soundEffectVolume = 1;
 
+    /// <summary>
+    /// 主音量
+    /// </summary>
+    public float mainVolume = 1;
+
+    /// <summary>
+    /// 背景音乐播放器列表
+    /// </summary>
+    private List<AudioSource> bgmAudioPlayer = new List<AudioSource>();
+
+    /// <summary>
+    /// 音效播放器列表
+    /// </summary>
+    private List<AudioSource> soundEffectAudioPlayer = new List<AudioSource>();
+
+    /// <summary>
+    /// 设置界面引用
+    /// </summary>
     public SettingUI setting = null;
+
+    /// <summary>
+    /// 设置界面是否打开
+    /// </summary>
+    public bool isOpenSettingUI = false;
 
     void Start()
     {
         setting = Resources.Load<SettingUI>("UI/SettingMenu");
     }
 
-    public bool isOpenSettingUI = false;
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))

@@ -1,8 +1,8 @@
 /*************************************************
- * ÏîÄ¿Ãû³Æ£ºUnityÊµÏÖÆôÓÃÉãÏñÍ·É¨ÃèÓëÉú³É¶şÎ¬Âë
- * ½Å±¾´´½¨ÈË£ºÄ§¿¨
- * ½Å±¾´´½¨Ê±¼ä£º2017.12.20
- * ½Å±¾¹¦ÄÜ£º¶şÎ¬ÂëÊ¶±ğÉú³É¿ØÖÆÀà
+ * ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Æ£ï¿½UnityÊµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½Î¬ï¿½ï¿½
+ * ï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½Ä§ï¿½ï¿½
+ * ï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£º2017.12.20
+ * ï¿½Å±ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½Î¬ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½É¿ï¿½ï¿½ï¿½ï¿½ï¿½
  * ***********************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -13,176 +13,114 @@ using UnityEngine.UI;
 using ZXing;
 using ZXing.QrCode;
 
-//¶şÎ¬ÂëÊ¶±ğÉú³É¿ØÖÆÀà
-public class QRCode : MonoBehaviour
+/// <summary>
+/// æ‘„åƒå¤´çº¹ç†æµ‹è¯•æ§åˆ¶å™¨
+/// å®ç°æ‘„åƒå¤´æ‰«æå’ŒäºŒç»´ç è¯†åˆ«åŠŸèƒ½
+/// </summary>
+public class WebCamTextureTest : MonoBehaviour
 {
-    #region É¨Ãè¶şÎ¬Âë
-    //¶¨ÒåÒ»¸öÓÃÓÚ´æ´¢µ÷ÓÃµçÄÔ»òÊÖ»úÉãÏñÍ·»­ÃæµÄRawImage
-    public RawImage m_cameraTexture;
+    /// <summary>
+    /// æ‘„åƒå¤´å›¾åƒæ˜¾ç¤ºç»„ä»¶
+    /// </summary>
+    public RawImage cameraTextureDisplay;
 
-    //ÉãÏñÍ·ÊµÊ±ÏÔÊ¾µÄ»­Ãæ
-    private WebCamTexture m_webCameraTexture;
+    /// <summary>
+    /// æ‘„åƒå¤´å®æ—¶ç”»é¢çº¹ç†
+    /// </summary>
+    private WebCamTexture webCamTexture;
 
-    //ÉêÇëÒ»¸ö¶ÁÈ¡¶şÎ¬ÂëµÄ±äÁ¿
-    private BarcodeReader m_barcodeRender = new BarcodeReader();
+    /// <summary>
+    /// äºŒç»´ç è§£ç å™¨
+    /// </summary>
+    private BarcodeReader barcodeReader = new BarcodeReader();
 
-    //¶à¾Ã¼ìË÷Ò»´Î¶şÎ¬Âë
-    private float m_delayTime = 3f;
+    /// <summary>
+    /// æ‰«æé—´éš”æ—¶é—´
+    /// </summary>
+    private float scanInterval = 3f;
 
-    private Quaternion initialRotation = Quaternion.identity; // ³õÊ¼Ğı×ª
-    #endregion
+    /// <summary>
+    /// åˆå§‹æ—‹è½¬è§’åº¦
+    /// </summary>
+    private Quaternion initialRotation = Quaternion.identity;
 
-    #region Éú³É¶şÎ¬Âë
-    //ÓÃÓÚÏÔÊ¾Éú³ÉµÄ¶şÎ¬ÂëRawImage
-    public RawImage m_QRCode;
+    /// <summary>
+    /// ç”Ÿæˆçš„äºŒç»´ç æ˜¾ç¤ºç»„ä»¶
+    /// </summary>
+    public RawImage qrCodeDisplay;
 
-    //ÉêÇëÒ»¸öĞ´¶şÎ¬ÂëµÄ±äÁ¿
-    private BarcodeWriter m_barcodeWriter;
-    #endregion
-    //public Button openBtn;
-    public TextMeshProUGUI ShiBeiResult;
-    //public Button closeBtn;
-    #region É¨Ãè¶şÎ¬Âë
-    void Start()
+    /// <summary>
+    /// äºŒç»´ç ç”Ÿæˆå™¨
+    /// </summary>
+    private BarcodeWriter barcodeWriter;
+
+    /// <summary>
+    /// è¯†åˆ«ç»“æœæ–‡æœ¬æ˜¾ç¤º
+    /// </summary>
+    public TextMeshProUGUI scanResultText;
+
+    /// <summary>
+    /// åˆå§‹åŒ–æ‘„åƒå¤´å’ŒäºŒç»´ç æ‰«æ
+    /// </summary>
+    private void Start()
     {
-        //openBtn.onClick.AddListener(OpenWebCam);
-        //closeBtn.onClick.AddListener(closeWebCam);
-
+        // è®¾ç½®åˆå§‹æ—‹è½¬è§’åº¦
         initialRotation = GetRotationForOrientation(Screen.orientation);
-        m_cameraTexture.transform.rotation = initialRotation;
-        //µ÷ÓÃÉãÏñÍ·²¢½«»­ÃæÏÔÊ¾ÔÚÆÁÄ»RawImageÉÏ
-        WebCamDevice[] tDevices = WebCamTexture.devices;    //»ñÈ¡ËùÓĞÉãÏñÍ·
-        string tDeviceName = tDevices[0].name;  //»ñÈ¡µÚÒ»¸öÉãÏñÍ·£¬ÓÃµÚÒ»¸öÉãÏñÍ·µÄ»­ÃæÉú³ÉÍ¼Æ¬ĞÅÏ¢
-        m_webCameraTexture = new WebCamTexture(tDeviceName, 400, 300);//Ãû×Ö,¿í,¸ß
-        m_cameraTexture.texture = m_webCameraTexture;   //¸³ÖµÍ¼Æ¬ĞÅÏ¢
-        m_webCameraTexture.Play();  //¿ªÊ¼ÊµÊ±ÏÔÊ¾
+        cameraTextureDisplay.transform.rotation = initialRotation;
 
-        InvokeRepeating("CheckQRCode", 0, m_delayTime);
+        // åˆå§‹åŒ–æ‘„åƒå¤´
+        WebCamDevice[] devices = WebCamTexture.devices;    // è·å–æ‰€æœ‰æ‘„åƒå¤´
+        if (devices.Length == 0)
+        {
+            Debug.LogError("No webcam devices found!");
+            return;
+        }
+
+        string deviceName = devices[0].name;  // è·å–ç¬¬ä¸€ä¸ªæ‘„åƒå¤´
+        webCamTexture = new WebCamTexture(deviceName, 400, 300); // å®½åº¦,é«˜åº¦
+        cameraTextureDisplay.texture = webCamTexture;   // è®¾ç½®å›¾åƒæ˜¾ç¤º
+        webCamTexture.Play();  // å¼€å§‹å®æ—¶æ˜¾ç¤º
+
+        // å¼€å§‹å®šæœŸæ£€æµ‹äºŒç»´ç 
+        InvokeRepeating(nameof(ScanQRCode), 0, scanInterval);
     }
-    Quaternion GetRotationForOrientation(ScreenOrientation orientation)
+
+    /// <summary>
+    /// è·å–å±å¹•æ–¹å‘å¯¹åº”çš„æ—‹è½¬è§’åº¦
+    /// </summary>
+    /// <param name="orientation">å±å¹•æ–¹å‘</param>
+    /// <returns>å¯¹åº”çš„æ—‹è½¬å››å…ƒæ•°</returns>
+    private Quaternion GetRotationForOrientation(ScreenOrientation orientation)
     {
         switch (orientation)
         {
-            case ScreenOrientation.Portrait:
-                return Quaternion.Euler(0, 0, -90); // ÊúÆÁÊ±Ğı×ª90¶È
-            case ScreenOrientation.PortraitUpsideDown:
-                return Quaternion.Euler(0, 0, 90); // ÊúÆÁµ¹ÖÃÊ±Ğı×ª-90¶È
             case ScreenOrientation.LandscapeLeft:
-                return Quaternion.Euler(0, 0, 0); // ºáÆÁ×óÊ±±£³Ö²»±ä
+                return Quaternion.Euler(0, 0, 90);
             case ScreenOrientation.LandscapeRight:
-                return Quaternion.Euler(0, 0, 0); // ºáÆÁÓÒÊ±±£³Ö²»±ä
+                return Quaternion.Euler(0, 0, -90);
+            case ScreenOrientation.PortraitUpsideDown:
+                return Quaternion.Euler(0, 0, 180);
+            case ScreenOrientation.Portrait:
             default:
-                return Quaternion.identity; // ÆäËûÇé¿ö±£³Ö³õÊ¼Ğı×ª
-        }
-    }
-    /// <summary>
-    /// ¼ìË÷¶şÎ¬Âë·½·¨
-    /// </summary>
-    void CheckQRCode()
-    {
-        Debug.Log("¿ªÊ¼Ê¶±ğ¶şÎ¬Âë");
-        ShiBeiResult.text = "¿ªÊ¼Ê¶±ğ¶şÎ¬Âë";
-        //´æ´¢ÉãÏñÍ·»­ÃæĞÅÏ¢ÌùÍ¼×ª»»µÄÑÕÉ«Êı×é
-        Color32[] m_colorData = m_webCameraTexture.GetPixels32();
-
-        //½«»­ÃæÖĞµÄ¶şÎ¬ÂëĞÅÏ¢¼ìË÷³öÀ´
-        var tResult = m_barcodeRender.Decode(m_colorData, m_webCameraTexture.width, m_webCameraTexture.height);
-
-        if (tResult != null)
-        {
-            Debug.Log(tResult.Text);
-            ShiBeiResult.text = tResult.Text;
-        }
-    }
-    #endregion
-
-    #region ´«µİ×Ö·û´®Éú³É¶şÎ¬Âë
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            //ÔÚÕâÖÖĞ´·¨ÖĞ  ¿í¸ß±ØĞë256  ·ñÔò±¨´í
-            //ShowQRCode("Ä§¿¨ÏÈÉú", 256, 256);
-            OpenWebCam();
-        }
-        // ¼ì²âÆÁÄ»·½Ïò±ä»¯
-        if (Screen.orientation != ScreenOrientation.AutoRotation)
-        {
-            // Èç¹ûÆÁÄ»·½Ïò¸Ä±ä£¬Ôò¸üĞÂĞı×ª
-            Quaternion newRotation = GetRotationForOrientation(Screen.orientation);
-            m_cameraTexture.transform.rotation = newRotation;
+                return Quaternion.identity;
         }
     }
 
     /// <summary>
-    /// ÏÔÊ¾»æÖÆµÄ¶şÎ¬Âë
+    /// æ‰«æå¹¶è¯†åˆ«äºŒç»´ç 
     /// </summary>
-    /// <param name="s_formatStr">É¨ÂëĞÅÏ¢</param>
-    /// <param name="s_width">Âë¿í</param>
-    /// <param name="s_height">Âë¸ß</param>
-    void ShowQRCode(string s_str, int s_width, int s_height)
+    private void ScanQRCode()
     {
-        //¶¨ÒåTexture2D²¢ÇÒÌî³äs
-        Texture2D tTexture = new Texture2D(s_width, s_height);
+        Debug.Log("å¼€å§‹è¯†åˆ«äºŒç»´ç ");
+        scanResultText.text = "å¼€å§‹è¯†åˆ«äºŒç»´ç ";
 
-        //»æÖÆÏà¶ÔÓ¦µÄÌùÍ¼ÎÆÀí
-        tTexture.SetPixels32(GeneQRCode(s_str, s_width, s_height));
+        Color32[] pixels = webCamTexture.GetPixels32();
+        var result = barcodeReader.Decode(pixels, webCamTexture.width, webCamTexture.height);
 
-        tTexture.Apply();
-
-        //¸³ÖµÌùÍ¼
-        m_QRCode.texture = tTexture;
-        //ÔÚÕâÖÖĞ´·¨ÖĞ  ¿í¸ß±ØĞë256  ·ñÔò±¨´í
-        Debug.Log("¿ªÊ¼ÊÖ¶¯Ê¶±ğ¶şÎ¬Âë");
-        //´æ´¢ÉãÏñÍ·»­ÃæĞÅÏ¢ÌùÍ¼×ª»»µÄÑÕÉ«Êı×é
-        Color32[] m_colorData = tTexture.GetPixels32();
-
-        //½«»­ÃæÖĞµÄ¶şÎ¬ÂëĞÅÏ¢¼ìË÷³öÀ´
-        var tResult = m_barcodeRender.Decode(m_colorData, s_width, s_height);
-
-        if (tResult != null)
+        if (result != null)
         {
-            Debug.Log(tResult.Text);
+            Debug.Log(result.Text);
+            scanResultText.text = result.Text;
         }
     }
-
-    /// <summary>
-    /// ·µ»Ø¶ÔÓ¦ÑÕÉ«Êı×é
-    /// </summary>
-    /// <param name="s_formatStr">É¨ÂëĞÅÏ¢</param>
-    /// <param name="s_width">Âë¿í</param>
-    /// <param name="s_height">Âë¸ß</param>
-    Color32[] GeneQRCode(string s_formatStr, int s_width, int s_height)
-    {
-        //ÉèÖÃÖĞÎÄ±àÂë¸ñÊ½£¬·ñÔòÖĞÎÄ²»Ö§³Ö
-        QrCodeEncodingOptions tOptions = new QrCodeEncodingOptions();
-        tOptions.CharacterSet = "UTF-8";
-        //ÉèÖÃ¿í¸ß
-        tOptions.Width = s_width;
-        tOptions.Height = s_height;
-        //ÉèÖÃ¶şÎ¬Âë¾àÀë±ßÔµµÄ¿Õ°×¾àÀë
-        tOptions.Margin = 3;
-
-        //ÖØÖÃÉêÇëĞ´¶şÎ¬Âë±äÁ¿Àà       (²ÎÊıÎª£ºÂë¸ñÊ½£¨¶şÎ¬Âë¡¢ÌõĞÎÂë...£©    ±àÂë¸ñÊ½£¨Ö§³ÖµÄ±àÂë¸ñÊ½£©    )
-        m_barcodeWriter = new BarcodeWriter { Format = BarcodeFormat.QR_CODE, Options = tOptions };
-
-        //½«ÔÛÃÇĞèÒªÒş²ØÔÚÂëºóÃæµÄĞÅÏ¢¸³ÖµÉÏ
-        return m_barcodeWriter.Write(s_formatStr);
-    }
-
-    public void OpenWebCam()
-    {
-        Debug.Log("´ò¿ª");
-        m_webCameraTexture.Play();
-        InvokeRepeating("CheckQRCode", 0, m_delayTime);
-    }
-
-    public void closeWebCam()
-    {
-        Debug.Log("¹Ø±Õ");
-        m_webCameraTexture.Stop();
-        CancelInvoke("CheckQRCode");
-        SceneManager.LoadScene("StartScene");
-    }
-    #endregion
 }

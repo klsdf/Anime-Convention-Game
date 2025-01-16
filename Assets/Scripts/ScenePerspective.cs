@@ -3,43 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// 场景缩放对象数据
+/// </summary>
 [Serializable]
 public class ScaleObj
 {
+    /// <summary>
+    /// 对象变换组件
+    /// </summary>
     public Transform objTransform;
+
+    /// <summary>
+    /// 原始缩放值
+    /// </summary>
     public Vector3 originScale;
 }
 
-
-
-//只需要给objTransform赋值即可，originScale会自动读取
+/// <summary>
+/// 场景透视控制器
+/// 根据物体在场景中的位置动态调整其大小
+/// </summary>
 public class ScenePerspective : MonoBehaviour
 {
-
-
-
-
+    /// <summary>
+    /// 第一个控制点
+    /// </summary>
     public Transform firstChildObject;
+
+    /// <summary>
+    /// 第二个控制点
+    /// </summary>
     public Transform secondChildObject;
+
+    /// <summary>
+    /// 第三个控制点
+    /// </summary>
     public Transform thirdChildObject;
+
+    /// <summary>
+    /// 需要缩放的对象数组
+    /// </summary>
     public ScaleObj[] objs;
 
-    private Vector3 intersect;//玩家和直线的垂线的交点
+    /// <summary>
+    /// 玩家与直线的垂线交点
+    /// </summary>
+    private Vector3 intersect;
 
+    /// <summary>
+    /// 距离相关变量
+    /// </summary>
+    private float dist1, dist2, dist3;
 
-    private float dist1;
-    private float dist2;
-    private float dist3;
-
+    /// <summary>
+    /// 当前缩放大小
+    /// </summary>
     private float scaleSize;
 
-
-
-    //控制玩家移动速度
+    /// <summary>
+    /// 玩家移动速度
+    /// </summary>
     private float playerSpeed;
 
+    /// <summary>
+    /// 玩家控制器引用
+    /// </summary>
     private DemoCharacterController playerController;
-
 
     private ScalePointSize pointSize1;
     private ScalePointSize pointSize2;
