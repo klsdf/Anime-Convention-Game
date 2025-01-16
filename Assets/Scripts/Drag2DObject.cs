@@ -2,48 +2,74 @@ using UnityEngine;
 //作者：闫辰祥
 //创建时间: 2024年8月9日
 
+/// <summary>
+/// 2D物体拖拽控制器
+/// 实现物体的拖拽功能
+/// </summary>
 public class Drag2DObject : MonoBehaviour
 {
+    /// <summary>
+    /// 鼠标点击位置与物体中心的偏移量
+    /// </summary>
     private Vector3 offset;
+
+    /// <summary>
+    /// 主相机引用
+    /// </summary>
     private Camera mainCamera;
+
+    /// <summary>
+    /// 是否正在拖拽
+    /// </summary>
     private bool isDragging = false;
 
-    void Start()
+    /// <summary>
+    /// 初始化组件引用
+    /// </summary>
+    private void Start()
     {
         mainCamera = Camera.main;
     }
 
-    void OnMouseDown()
+    /// <summary>
+    /// 处理鼠标按下事件
+    /// </summary>
+    private void OnMouseDown()
     {
-        // 计算鼠标点击位置和物体中心之间的偏移量
         Vector3 mousePosition = GetMouseWorldPosition();
         offset = transform.position - mousePosition;
         isDragging = true;
         GameManager.Instance.isDragingObject = true;
     }
 
-    void OnMouseDrag()
+    /// <summary>
+    /// 处理鼠标拖拽事件
+    /// </summary>
+    private void OnMouseDrag()
     {
-        // 更新物体位置
         if (isDragging)
         {
             transform.position = GetMouseWorldPosition() + offset;
         }
     }
 
-    void OnMouseUp()
+    /// <summary>
+    /// 处理鼠标释放事件
+    /// </summary>
+    private void OnMouseUp()
     {
-        // 停止拖动
         isDragging = false;
         GameManager.Instance.isDragingObject = false;
     }
 
+    /// <summary>
+    /// 获取鼠标在世界坐标中的位置
+    /// </summary>
+    /// <returns>返回鼠标位置的世界坐标</returns>
     private Vector3 GetMouseWorldPosition()
     {
-        // 获取鼠标在世界坐标中的位置
         Vector3 mousePoint = Input.mousePosition;
-        mousePoint.z = mainCamera.nearClipPlane; // 确保我们在2D空间中，所以Z轴设为0
-
+        mousePoint.z = mainCamera.nearClipPlane;
         return mainCamera.ScreenToWorldPoint(mousePoint);
     }
 }

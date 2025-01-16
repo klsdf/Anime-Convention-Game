@@ -2,32 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 相机跟随控制器
+/// 实现相机平滑跟随目标物体的功能
+/// </summary>
 public class DemoCameraFollow : MonoBehaviour
 {
+    /// <summary>
+    /// 相机组件引用
+    /// </summary>
+    private Camera mycamera;
 
-
-    private Camera  mycamera;
-    //public Transform[] targets;
+    /// <summary>
+    /// 当前跟随的目标
+    /// </summary>
     public Transform nowTarget;
+
+    /// <summary>
+    /// 目标索引
+    /// </summary>
     private int index = 0;
 
-
+    /// <summary>
+    /// 平滑移动时间
+    /// </summary>
     public float smoothTime = 0.3f;
+
+    /// <summary>
+    /// Y轴阈值
+    /// </summary>
     public float yThreshold = -1f;
+
+    /// <summary>
+    /// X轴速度
+    /// </summary>
     private float velocityX;
+
+    /// <summary>
+    /// Y轴速度
+    /// </summary>
     private float velocityY;
-    
 
+    /// <summary>
+    /// 边界精灵渲染器
+    /// </summary>
+    public SpriteRenderer boundSprite;
 
-    public SpriteRenderer boundSprite; // 新增：限制边界的 Sprite
-    
-    // 用于存储相机的移动限制
+    /// <summary>
+    /// 相机移动的最小X坐标
+    /// </summary>
     private float minX;
+
+    /// <summary>
+    /// 相机移动的最大X坐标
+    /// </summary>
     private float maxX;
+
+    /// <summary>
+    /// 相机移动的最小Y坐标
+    /// </summary>
     private float minY;
+
+    /// <summary>
+    /// 相机移动的最大Y坐标
+    /// </summary>
     private float maxY;
 
-
+    /// <summary>
+    /// 初始化相机设置
+    /// </summary>
     private void Start()
     {
         mycamera = GetComponent<Camera>();
@@ -40,26 +83,34 @@ public class DemoCameraFollow : MonoBehaviour
         }
     }
 
-    // 计算相机的移动边界
+    /// <summary>
+    /// 计算相机的移动边界
+    /// </summary>
     private void CalculateBounds()
     {
         float verticalSize = mycamera.orthographicSize;
         float horizontalSize = verticalSize * Screen.width / Screen.height;
 
-        // 获取sprite的边界
         float spriteWidth = boundSprite.bounds.size.x;
         float spriteHeight = boundSprite.bounds.size.y;
 
-        // 计算相机可移动的最大范围
-        minX = boundSprite.transform.position.x - (spriteWidth/2 - horizontalSize);
-        maxX = boundSprite.transform.position.x + (spriteWidth/2 - horizontalSize);
-        minY = boundSprite.transform.position.y - (spriteHeight/2 - verticalSize);
-        maxY = boundSprite.transform.position.y + (spriteHeight/2 - verticalSize);
+        // Calculate boundaries based on sprite edges and camera view size
+        minX = boundSprite.transform.position.x - spriteWidth/2 + horizontalSize;
+        maxX = boundSprite.transform.position.x + spriteWidth/2 - horizontalSize;
+        minY = boundSprite.transform.position.y - spriteHeight/2 + verticalSize;
+        maxY = boundSprite.transform.position.y + spriteHeight/2 - verticalSize;
     }
 
-    public float dragSpeed = 20; // 拖动速度
+    /// <summary>
+    /// 相机拖动速度
+    /// </summary>
+    public float dragSpeed = 20;
 
+    /// <summary>
+    /// 拖动起始点
+    /// </summary>
     private Vector3 dragOrigin;
+
     private void Update()
     {
         // if (Input.GetMouseButtonDown(2)) // 检测鼠标中键按下

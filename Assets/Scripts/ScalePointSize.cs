@@ -2,46 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 缩放点大小控制器
+/// 控制物体在不同位置的缩放大小
+/// </summary>
 public class ScalePointSize : MonoBehaviour
 {
-    public float scaleSize=1.0f;
+    /// <summary>
+    /// 缩放大小
+    /// </summary>
+    public float scaleSize = 1.0f;
 
+    /// <summary>
+    /// 跟随目标
+    /// </summary>
+    public GameObject target;
 
-    public GameObject target;//跟随的物体
-
-   // private SpriteRenderer render;
-
-   //public int pointIndex;
-
-
-
-
+    /// <summary>
+    /// 初始化组件
+    /// </summary>
     private void Start()
     {
-        //render = target.GetComponent<SpriteRenderer>();
+        // 初始化代码...
     }
 
-
+    /// <summary>
+    /// 更新缩放
+    /// </summary>
     private void Update()
     {
-        //float x = 0;
-        //    float y = 0;
-        //if (pointIndex == 0)
-        //{
-        //     x = target.transform.position.x;
-        //     y = target.transform.position.y -render.bounds.size.y / 2;
-        //    transform.position = new Vector3(x, y, 0);
-        //}
-        //else if (pointIndex == 1)
-        //{
-        //     x = target.transform.position.x;
-        //     y = target.transform.position.y + render.bounds.size.y / 2;
-        //    transform.position = new Vector3(x, y, 0);
-        //}
-
-
-
-
-     
+        // 更新逻辑...
     }
 }
