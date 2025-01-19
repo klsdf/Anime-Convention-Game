@@ -402,17 +402,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92707187}
   m_CullTransparentMesh: 1
---- !u!114 &96508208 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6278750857629202849, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-  m_PrefabInstance: {fileID: 922194015188199410}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &140051036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1274,17 +1263,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1091139628065869972, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
   m_PrefabInstance: {fileID: 922194015188199410}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &996152466 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4725844145068967587, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-  m_PrefabInstance: {fileID: 922194015188199410}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1010921669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,17 +1552,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6416fa56063fd442a48ee64e3832b0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1363614755 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4102536449846449255, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-  m_PrefabInstance: {fileID: 922194015188199410}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1387855864
@@ -2365,22 +2332,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 464951518798711069, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-      propertyPath: audioMixer
-      value: 
-      objectReference: {fileID: 24100000, guid: f46372031cc02e54e8dd28ebfb12e077, type: 2}
-    - target: {fileID: 464951518798711069, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-      propertyPath: sfxVolumeSlider
-      value: 
-      objectReference: {fileID: 996152466}
-    - target: {fileID: 464951518798711069, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-      propertyPath: musicVolumeSlider
-      value: 
-      objectReference: {fileID: 1363614755}
-    - target: {fileID: 464951518798711069, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
-      propertyPath: masterVolumeSlider
-      value: 
-      objectReference: {fileID: 96508208}
     - target: {fileID: 555284294203458438, guid: e26e4ec43df768a418c7c55fcef6d1d1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor;
@@ -25,15 +24,15 @@ namespace ACG
             var adbFolders = System.IO.Directory.GetDirectories(Application.dataPath, "Adb", System.IO.SearchOption.AllDirectories);
             foreach (var folder in adbFolders)
             {
-            var relativePath = "Assets" + folder.Replace(Application.dataPath, "").Replace('\\', '/');
-            var guids = AssetDatabase.FindAssets("", new[] { relativePath });
-
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var entry = addressSetting.CreateOrMoveEntry(guid, newGroup);
-                entry.address = path;
-            }
+                var relativePath = "Assets" + folder.Replace(Application.dataPath, "").Replace('\\', '/');
+                var guids = AssetDatabase.FindAssets("", new[] { relativePath });
+                
+                foreach (var guid in guids)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(guid);
+                    var entry = addressSetting.CreateOrMoveEntry(guid, newGroup);
+                    entry.address = path;
+                }
             }
 
             AssetDatabase.SaveAssets();
