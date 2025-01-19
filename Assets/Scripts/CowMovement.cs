@@ -49,6 +49,17 @@ public class CowMovement : MonoBehaviour
     /// <summary>
     /// The main character's transform.
     /// </summary>
+    private bool hasTriggered = false;
+
+    /// <summary>
+    /// 判断物体不会重复出现
+    /// </summary>
+    public Transform prefabSpawnPoint;
+
+    /// <summary>
+    /// 物体生成
+    /// </summary>
+
     public Transform mainCharacter;
 
     /// <summary>
@@ -61,19 +72,17 @@ public class CowMovement : MonoBehaviour
         StartCoroutine(ChangeDirectionRoutine());
 
         // Ensure the interaction sign is initially hidden
-        if (interactionSign != null)
-        {
-            interactionSign.SetActive(false);
-        }
+        //if (interactionSign != null)
+        //{
+         //   interactionSign.SetActive(false);
+       // }
     }
-
-    /// <summary>
-    /// Updates the cow's position each frame.
-    /// </summary>
+   
     private void Update()
     {
         MoveCow();
         CheckForInteraction();
+        
     }
 
     /// <summary>
@@ -129,16 +138,29 @@ public class CowMovement : MonoBehaviour
         if (mainCharacter != null && interactionSign != null)
         {
             float distance = Vector2.Distance(transform.position, mainCharacter.position);
-            if (distance <= interactionDistance)
+
+            if (distance <= interactionDistance && !hasTriggered)
             {
-                interactionSign.SetActive(true);
-                // Position the interaction sign above the cow
-                interactionSign.transform.position = transform.position + new Vector3(0, 1, 0);
+                GenerateInteractionPrefab();
+                hasTriggered = true; // 确保只触发一次
             }
-            else
+            else if (distance > interactionDistance)
             {
-                interactionSign.SetActive(false);
+                hasTriggered = false; // 重置标志，允许再次触发
             }
         }
+    }
+    private void GenerateInteractionPrefab()
+    {
+        // 在指定位置生成 Prefab
+        GameObject instance = Instantiate(interactionSign, prefabSpawnPoint.position, Quaternion.identity);
+
+        // 将生成的物体设置为 prefabSpawnPoint 的子物体
+        instance.transform.SetParent(prefabSpawnPoint);
+
+        // 停留两秒后销毁
+        Destroy(instance, 2f);
+
+        Debug.Log("Generated a prefab at position: " + prefabSpawnPoint.position);
     }
 } 
