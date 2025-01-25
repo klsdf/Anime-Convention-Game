@@ -15,4 +15,4 @@ EditorBuildSettings:
     path: Assets/Scenes/SandBoxs/GetAssert.unity
     guid: a1bc2634631cd62468fd7529fa96bd00
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: 37e80d66e5e7c9442a71313b8984bcce, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: d018c83a01610734da531e9af8902aae, type: 2}
