@@ -2,26 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//×÷Õß£º¹¨¿Æº²
-//´´½¨Ê±¼ä: 2025Äê1ÔÂ22ÈÕ
+///ä½œè€…ï¼šé¾šç§‘ç¿°
+//åˆ›å»ºæ—¶é—´: 2025å¹´1æœˆ22æ—¥
 
 /// <summary>
-/// Ïà»ú¶¯»­´¥·¢Æ÷
-/// µ÷½ÚÏà»úµÄ´óĞ¡ºÍ¶¯»­Ê±¼ä
+/// ç›¸æœºåŠ¨ç”»è§¦å‘å™¨
+/// è°ƒèŠ‚ç›¸æœºçš„å¤§å°å’ŒåŠ¨ç”»æ—¶é—´
 /// </summary>
 public class CameraZoomTrigger : MonoBehaviour
 {
     public CameraZoom cameraZoomController; 
     /// <summary>
-    /// ÒıÓÃ CameraZoomController ½Å±¾
+    /// å¼•ç”¨ CameraZoomController è„šæœ¬
     /// </summary>
     public float forwardZoom = 1f; 
     /// <summary>
-    /// ÇøÓòÄÚµÄÄ¿±êËõ·ÅÖµ
+    /// åŒºåŸŸå†…çš„ç›®æ ‡ç¼©æ”¾å€¼
     /// </summary>
     public float transitionTime = 0.5f; 
     /// <summary>
-    /// ¶¯»­Æ½»¬Ê±¼ä
+    /// åŠ¨ç”»å¹³æ»‘æ—¶é—´
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -29,7 +29,7 @@ public class CameraZoomTrigger : MonoBehaviour
         {
             
             /// <summary>
-            /// ½øÈëÇøÓòÊ±µ÷ÓÃËõ·Å
+            /// è¿›å…¥åŒºåŸŸæ—¶è°ƒç”¨ç¼©æ”¾
             /// </summary>
             cameraZoomController.AdjustZoom(forwardZoom, transitionTime);
         }
@@ -41,9 +41,10 @@ public class CameraZoomTrigger : MonoBehaviour
         {
             
             /// <summary>
-            /// Àë¿ªÇøÓòÊ±ÖØÖÃÎªÄ¬ÈÏÖµ
+            /// ç¦»å¼€åŒºåŸŸæ—¶é‡ç½®ä¸ºé»˜è®¤å€¼
             /// </summary>
             cameraZoomController.ResetToDefault(transitionTime);
         }
     }
 }
+

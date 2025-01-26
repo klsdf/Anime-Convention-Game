@@ -3,79 +3,79 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
-//×÷Õß£º¹¨¿Æº²
-//´´½¨Ê±¼ä: 2025Äê1ÔÂ22ÈÕ
+//ä½œè€…ï¼šé¾šç§‘ç¿°
+//åˆ›å»ºæ—¶é—´: 2025å¹´1æœˆ22æ—¥
 
 /// <summary>
-/// Ïà»úµÄ¶¯»­¿ØÖÆÆ÷
-/// ±ÜÃâ¶¯»­³öÏÖ³åÍ»
-/// (Ïà»úµÄ¶¯»­ÇĞ»»¹¦ÄÜ»¹ĞèÒªĞŞ¸Ä)
+/// ç›¸æœºçš„åŠ¨ç”»æ§åˆ¶å™¨
+/// é¿å…åŠ¨ç”»å‡ºç°å†²çª
+/// (ç›¸æœºçš„åŠ¨ç”»åˆ‡æ¢åŠŸèƒ½è¿˜éœ€è¦ä¿®æ”¹)
 /// </summary>
 public class CameraZoom : MonoBehaviour
 {
     public CinemachineVirtualCamera cinemachineCamera; 
     /// <summary>
-    /// ÒıÓÃ Cinemachine ĞéÄâÏà»ú
+    /// å¼•ç”¨ Cinemachine è™šæ‹Ÿç›¸æœº
     /// </summary>
     private float defaultZoom; 
     /// <summary>
-    /// Ä¬ÈÏ³õÊ¼Ëõ·ÅÖµ
+    /// é»˜è®¤åˆå§‹ç¼©æ”¾å€¼
     /// </summary>
     private float currentZoom; 
     /// <summary>
-    /// µ±Ç°Ïà»úµÄËõ·ÅÖµ
+    /// å½“å‰ç›¸æœºçš„ç¼©æ”¾å€¼
     /// </summary>
     private float forwardZoom; 
     /// <summary>
-    /// ÏÂÒ»´ÎËõ·ÅÄ¿±êÖµ
+    /// ä¸‹ä¸€æ¬¡ç¼©æ”¾ç›®æ ‡å€¼
     /// </summary>
     private int triggerCount = 0; 
     /// <summary>
-    /// ÓÃÀ´¸ú×ÙÍæ¼Ò½øÈëµÄ´¥·¢Æ÷ÊıÁ¿
+    /// ç”¨æ¥è·Ÿè¸ªç©å®¶è¿›å…¥çš„è§¦å‘å™¨æ•°é‡
     /// </summary>
 
     private Tween zoomTween; 
     /// <summary>
-    /// ¿ØÖÆËõ·Å¶¯»­
+    /// æ§åˆ¶ç¼©æ”¾åŠ¨ç”»
     /// </summary>
 
     private void Start()
     {
         
         /// <summary>
-        /// ³õÊ¼»¯Ä¬ÈÏÖµÎªµ±Ç°Ïà»úµÄÕı½»´óĞ¡
+        /// åˆå§‹åŒ–é»˜è®¤å€¼ä¸ºå½“å‰ç›¸æœºçš„æ­£äº¤å¤§å°
         /// </summary>
         defaultZoom = cinemachineCamera.m_Lens.OrthographicSize;
         currentZoom = defaultZoom; 
         /// <summary>
-        /// ³õÊ¼Ê±µ±Ç°Ëõ·ÅÖµµÈÓÚÄ¬ÈÏÖµ
+        /// åˆå§‹æ—¶å½“å‰ç¼©æ”¾å€¼ç­‰äºé»˜è®¤å€¼
         /// </summary>
     }
 
     /// <summary>
-    /// µ÷ÕûÏà»úËõ·ÅÖÁÖ¸¶¨Ä¿±êÖµ
+    /// è°ƒæ•´ç›¸æœºç¼©æ”¾è‡³æŒ‡å®šç›®æ ‡å€¼
     /// </summary>
-    /// <param name="forwardSize">Ä¿±êËõ·ÅÖµ£¨×îÖÕÖµ£©</param>
-    /// <param name="transitionTime">Æ½»¬¹ı¶ÉÊ±¼ä</param>
+    /// <param name="forwardSize">ç›®æ ‡ç¼©æ”¾å€¼ï¼ˆæœ€ç»ˆå€¼ï¼‰</param>
+    /// <param name="transitionTime">å¹³æ»‘è¿‡æ¸¡æ—¶é—´</param>
     public void AdjustZoom(float forwardSize, float transitionTime)
     {
         /// <summary>
-        /// Ôö¼Ó´¥·¢Æ÷¼ÆÊı
+        /// å¢åŠ è§¦å‘å™¨è®¡æ•°
         /// </summary>
         triggerCount++;
  
         /// <summary>
-        /// ÉèÖÃÄ¿±êËõ·ÅÖµ
+        /// è®¾ç½®ç›®æ ‡ç¼©æ”¾å€¼
         /// </summary>
         forwardZoom = forwardSize;
 
         /// <summary>
-        /// Í£Ö¹Ö®Ç°µÄËõ·Å¶¯»­£¨Èç¹ûÓĞ£©
+        /// åœæ­¢ä¹‹å‰çš„ç¼©æ”¾åŠ¨ç”»ï¼ˆå¦‚æœæœ‰ï¼‰
         /// </summary>
         zoomTween?.Kill();
 
         /// <summary>
-        /// Æô¶¯ĞÂµÄËõ·Å¶¯»­
+        /// å¯åŠ¨æ–°çš„ç¼©æ”¾åŠ¨ç”»
         /// </summary>
         zoomTween = DOTween.To(
             () => cinemachineCamera.m_Lens.OrthographicSize,
@@ -85,30 +85,30 @@ public class CameraZoom : MonoBehaviour
         ).OnComplete(() =>
         {
             /// <summary>
-            /// ¶¯»­Íê³Éºó£¬½«µ±Ç°Ëõ·ÅÖµ¸üĞÂÎªÄ¿±êÖµ
+            /// åŠ¨ç”»å®Œæˆåï¼Œå°†å½“å‰ç¼©æ”¾å€¼æ›´æ–°ä¸ºç›®æ ‡å€¼
             /// </summary>
             currentZoom = forwardZoom;
         });
     }
 
     /// <summary>
-    /// ÖØÖÃÏà»úËõ·Åµ½Ä¬ÈÏÖµ
+    /// é‡ç½®ç›¸æœºç¼©æ”¾åˆ°é»˜è®¤å€¼
     /// </summary>
-    /// <param name="transitionTime">Æ½»¬¹ı¶ÉÊ±¼ä</param>
+    /// <param name="transitionTime">å¹³æ»‘è¿‡æ¸¡æ—¶é—´</param>
     public void ResetToDefault(float transitionTime)
     {
         /// <summary>
-        /// ¼õÉÙ´¥·¢Æ÷¼ÆÊı
+        /// å‡å°‘è§¦å‘å™¨è®¡æ•°
         /// </summary>
         triggerCount--;
 
         /// <summary>
-        /// Ö»ÓĞµ±¼ÆÊıÎª 0 Ê±£¬²ÅÖ´ĞĞÖØÖÃ
+        /// åªæœ‰å½“è®¡æ•°ä¸º 0 æ—¶ï¼Œæ‰æ‰§è¡Œé‡ç½®
         /// </summary>
         if (triggerCount <= 0)
         {
             /// <summary>
-            /// È·±£¼ÆÊı²»Îª¸º
+            /// ç¡®ä¿è®¡æ•°ä¸ä¸ºè´Ÿ
             /// </summary>
             triggerCount = 0; 
             zoomTween?.Kill();

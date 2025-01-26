@@ -3,76 +3,101 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+
+///ä½œè€…ï¼šé¾šç§‘ç¿°
+///æ—¶é—´ï¼š2025å¹´1æœˆ25æ—¥
+///åŠŸèƒ½ï¼šå•†åº—UIæ§åˆ¶
 public class ShopUIControl : MonoBehaviour
 {
-    public GameObject shopCanvas; // ÉÌµê Canvas
-    public GameObject gameUICanvas; // ÓÎÏ·Ö÷½çÃæ Canvas£¨¿ÉÑ¡£©
+   public GameObject shopCanvas;
+/// <summary>
+/// å•†åº— Canvas
+/// </summary>
+public GameObject gameUICanvas; 
+/// <summary>
+/// æ¸¸æˆä¸»ç•Œé¢ Canvasï¼ˆå¯é€‰ï¼‰
+/// </summary>
 
-    public Button openShopButton; // ´ò¿ªÉÌµêµÄ°´Å¥
-    public Button closeShopButton; // ¹Ø±ÕÉÌµêµÄ°´Å¥
+public Button openShopButton;
+/// <summary>
+/// æ‰“å¼€å•†åº—çš„æŒ‰é’®
+/// </summary>
+public Button closeShopButton; 
+/// å…³é—­å•†åº—çš„æŒ‰é’®
 
-    private bool isShopOpen = false;
+private bool isShopOpen = false;
 
-    void Start()
+public Collider2D shopSpriteCollider; // Reference to the sprite's collider
+
+private Camera mainCamera;
+
+void Start()
+{
+    /// ç»™æŒ‰é’®æ·»åŠ ç›‘å¬äº‹ä»¶
+    if (openShopButton != null)
     {
-        // ¸ø°´Å¥Ìí¼Ó¼àÌıÊÂ¼ş
-        if (openShopButton != null)
-        {
-            openShopButton.onClick.AddListener(OpenShop); // µã»÷°´Å¥Ê±´ò¿ªÉÌµê
-           
-        }
-        if (closeShopButton != null)
-        {
-            closeShopButton.onClick.AddListener(CloseShop); // µã»÷°´Å¥Ê±¹Ø±ÕÉÌµê
-        }
-
-        // È·±£ÔÚ¿ªÊ¼Ê±ÉÌµê¹Ø±Õ
-        if (shopCanvas != null)
-        {
-            shopCanvas.SetActive(false);
-        }
+        openShopButton.onClick.AddListener(OpenShop); /// ç‚¹å‡»æŒ‰é’®æ—¶æ‰“å¼€å•†åº—
+       
     }
-    void Update()
+    if (closeShopButton != null)
     {
-        // ¼ì²â°´ÏÂ 'E' ¼üÊ±´ò¿ªÉÌµê
-        if (Input.GetKeyDown(KeyCode.E) && !isShopOpen)
-        {
-            OpenShop();
-        }
-    }
-
-    public void OpenShop()
-    {
-        if (shopCanvas != null)
-        {
-            shopCanvas.SetActive(true); // ´ò¿ªÉÌµê
-            Debug.Log("The button trigger success");
-        }
-
-        if (gameUICanvas != null)
-        {
-            gameUICanvas.SetActive(false); // Òş²ØÖ÷½çÃæ£¨¿ÉÑ¡£©
-        }
-
-        Time.timeScale = 0; // ÔİÍ£ÓÎÏ·£¨¿ÉÑ¡£©
-        isShopOpen = true;
-        Debug.Log("Shop opened!");
+        closeShopButton.onClick.AddListener(CloseShop); ///ç‚¹å‡»æŒ‰é’®æ—¶å…³é—­å•†åº—
     }
 
-    public void CloseShop()
+    mainCamera = Camera.main;
+
+    /// ç¡®ä¿åœ¨å¼€å§‹æ—¶å•†åº—å…³é—­
+    if (shopCanvas != null)
     {
-        if (shopCanvas != null)
-        {
-            shopCanvas.SetActive(false); // ¹Ø±ÕÉÌµê
-        }
-
-        if (gameUICanvas != null)
-        {
-            gameUICanvas.SetActive(true); // ÏÔÊ¾Ö÷½çÃæ£¨¿ÉÑ¡£©
-        }
-
-        Time.timeScale = 1; // »Ö¸´ÓÎÏ·Âß¼­£¨¿ÉÑ¡£©
-        isShopOpen = false;
-        Debug.Log("Shop closed!");
+        shopCanvas.SetActive(false);
     }
+}
+ void Update()
+    {
+        // Check for mouse click
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            if (shopSpriteCollider != null && shopSpriteCollider.OverlapPoint(mousePosition))
+            {
+                OpenShop();
+            }
+        }
+    }
+
+public void OpenShop()
+{
+    if (shopCanvas != null)
+    {
+        shopCanvas.SetActive(true); // æ‰“å¼€å•†åº—
+        Debug.Log("The button trigger success");
+    }
+
+    if (gameUICanvas != null)
+    {
+        gameUICanvas.SetActive(false); // éšè—ä¸»ç•Œé¢ï¼ˆå¯é€‰ï¼‰
+    }
+
+    Time.timeScale = 0; // æš‚åœæ¸¸æˆï¼ˆå¯é€‰ï¼‰
+    isShopOpen = true;
+    Debug.Log("Shop opened!");
+}
+
+public void CloseShop()
+{
+    if (shopCanvas != null)
+    {
+        shopCanvas.SetActive(false); // å…³é—­å•†åº—
+    }
+
+    if (gameUICanvas != null)
+    {
+        gameUICanvas.SetActive(true); // æ˜¾ç¤ºä¸»ç•Œé¢ï¼ˆå¯é€‰ï¼‰
+    }
+
+    Time.timeScale = 1; // æ¢å¤æ¸¸æˆé€»è¾‘ï¼ˆå¯é€‰ï¼‰
+    isShopOpen = false;
+    Debug.Log("Shop closed!");
+}
 }
