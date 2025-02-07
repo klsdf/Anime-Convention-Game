@@ -17,7 +17,7 @@ public class ItemSaveController : Singleton<ItemSaveController>
         closeBtn.onClick.AddListener(CloseUI);
     }
 
-    public void OpenUI()
+    public void OpenUI(SaveableItemData saveableItemData)
     {
         UIPanel.SetActive(true);
     }

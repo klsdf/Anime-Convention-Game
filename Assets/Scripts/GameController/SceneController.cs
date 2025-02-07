@@ -26,6 +26,9 @@ public class SceneController : Singleton<SceneController>
     private SceneObject currentSceneObject ;
     private DemoCameraFollow mainCamera;
 
+    public SceneType startSceneType;
+    public GameObject player;
+
     private void Start()
     {
         mainCamera = Camera.main.GetComponent<DemoCameraFollow>();
@@ -34,6 +37,27 @@ public class SceneController : Singleton<SceneController>
         foreach (var sceneObject in sceneObjects)
         {
             sceneObject.sceneObject.SetActive(sceneObject == currentSceneObject);
+        }
+
+        MoveTOScene(startSceneType);
+    }
+
+    /// <summary>
+    /// 移动玩家到指定场景的出生点
+    /// </summary>
+    /// <param name="sceneType">目标场景类型</param>
+    public void MoveTOScene(SceneType sceneType)
+    {
+        // 获取目标场景的出生点
+        Transform spawnPoint = GetSpawnPoint(sceneType);
+        if (spawnPoint != null)
+        {
+            // 移动玩家到出生点
+            player.transform.position = spawnPoint.position;
+        }
+        else
+        {
+            Debug.LogError($"未找到场景 {sceneType} 的出生点");
         }
     }
 
