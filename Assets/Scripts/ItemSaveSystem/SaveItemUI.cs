@@ -1,5 +1,5 @@
 //作者：闫辰祥
-//2025/2/7
+//2025.2.7
 
 
 using UnityEngine;
@@ -15,6 +15,12 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     private Transform originalParent;
     private Vector3 startPosition;
     private Slot startSlot;
+
+    public void UpdateItem(SaveableItemData saveableItemData)
+    {
+        Sprite sprite = Resources.Load<Sprite>($"UI/Items/{saveableItemData.itemName}");
+        GetComponent<Image>().sprite = sprite;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -73,8 +79,13 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     private void MoveToSlot(Slot newSlot)
     {
-        startSlot.ClearItem();
+        // print("移动到目标格子");
+
         newSlot.SetItem(this);
+        // startSlot.ClearItem();
+    }
+    private void OnDestroy() {
+        // print("我g了");
     }
 
     private void SwapItems(Slot targetSlot)

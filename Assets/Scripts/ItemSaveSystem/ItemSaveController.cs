@@ -1,5 +1,6 @@
 //作者：闫辰祥
 //创建时间：2025/1/15
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,13 +13,15 @@ public class ItemSaveController : Singleton<ItemSaveController>
 {
     public GameObject UIPanel;
     public Button closeBtn;
+    public SaveItemArea saveItemArea;
 
     private void Awake() {
         closeBtn.onClick.AddListener(CloseUI);
     }
 
-    public void OpenUI(SaveableItemData saveableItemData)
+    public void OpenUI(List<SaveableItemData> saveableItemData)
     {
+        saveItemArea.UpdateData(saveableItemData);
         UIPanel.SetActive(true);
     }
     public void CloseUI()
