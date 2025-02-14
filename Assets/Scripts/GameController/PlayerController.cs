@@ -2,8 +2,7 @@ using UnityEngine;
 using JoystickPack;
 using DigitalRubyShared;
 using DG.Tweening;
-using UnityEngine.UI;
-using TMPro;
+
 
 
 namespace ACG{
@@ -16,7 +15,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public InputType inputType;
-    public  TMP_Dropdown dropdown;
     [SerializeField] VariableJoystick variableJoystick;
     [SerializeField] BoxCollider2D groundCollider;
     [Range(0.5f,6.0f)] public float speed = 1.0f;
@@ -26,8 +24,6 @@ public class PlayerController : MonoBehaviour
             GestureManager.Instance.RegisterGestureDelegate(GestureManager.GestureRecognizerType.SingleFingerSingleTap, MoveByFigerTap);
             variableJoystick.gameObject.SetActive(false);
         }
-
-        dropdown.onValueChanged.AddListener(DebugInput);
     }
 
     // Start is called before the first frame update
@@ -59,25 +55,6 @@ public class PlayerController : MonoBehaviour
                 move.Restart();
             }
         }
-    }
-
-    public void DebugInput(int index)
-    {
-        switch(index)
-        {
-            case 0:
-                inputType = InputType.Joystick;
-                variableJoystick.gameObject.SetActive(true);
-                break;
-            case 1:
-                inputType = InputType.Gesture;
-                GestureManager.Instance.RegisterGestureDelegate(GestureManager.GestureRecognizerType.SingleFingerSingleTap, MoveByFigerTap);
-                variableJoystick.gameObject.SetActive(false);
-                break;
-            default:
-                break;
-        }
-    
     }
 }
 

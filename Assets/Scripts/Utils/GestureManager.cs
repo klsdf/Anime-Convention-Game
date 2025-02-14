@@ -50,6 +50,8 @@ public class GestureManager:Singleton<GestureManager>
     {
         var longPressGesture = new LongPressGestureRecognizer();
         longPressGesture.MaximumNumberOfTouchesToTrack = 1;
+        longPressGesture.MinimumDurationSeconds = 0.2f;
+        longPressGesture.ThresholdUnits = 0.1f;
         FingersScript.Instance?.AddGesture(longPressGesture);
         _gestureRecognizers.Add(GestureRecognizerType.LongPress, longPressGesture);
     }
