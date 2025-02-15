@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public InputType inputType;
     [SerializeField] VariableJoystick variableJoystick;
-    [SerializeField] BoxCollider2D groundCollider;
+    [SerializeField] Collider2D groundCollider;
     [Range(0.5f,6.0f)] public float speed = 1.0f;
     Tween move;
     private void Start() {
