@@ -7,11 +7,6 @@ using UnityEngine.UI;
 
 public class SaveItemArea : MonoBehaviour
 {
-
-    private void Start()
-    {
-
-    }
     public void UpdateData(List<SaveableItemData> saveableItemDatas)
     {
         ClearAllSlots();

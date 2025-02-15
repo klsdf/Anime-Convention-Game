@@ -106,11 +106,37 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_0"
+      name: player_xiadun_0
       rect:
         serializedVersion: 2
         x: 49
@@ -124,14 +150,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a7c7e79dba3d3d64e8933672f8aa1e69
-      internalID: 107274816
+      spriteID: 380e766893f1046449862f742b798413
+      internalID: 1721571928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_1"
+      name: player_xiadun_1
       rect:
         serializedVersion: 2
         x: 193
@@ -145,17 +171,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 477fc4e8c380caa4c9793c414d04510d
-      internalID: 375274176
+      spriteID: 01b7c7b2042b77d41a7aa67af041ee8d
+      internalID: 793240754
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_2"
+      name: player_xiadun_2
       rect:
         serializedVersion: 2
-        x: 337
+        x: 338
         y: 3
         width: 45
         height: 130
@@ -166,14 +192,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61be5ab4e6589a3418b0d0a8f262f6b3
-      internalID: 1789500370
+      spriteID: e2ae6e14b0a297a40bf3bd4c0092710e
+      internalID: 1495537013
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_3"
+      name: player_xiadun_3
       rect:
         serializedVersion: 2
         x: 482
@@ -187,14 +213,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4728840143661d4f962c832a407ff40
-      internalID: 1917366500
+      spriteID: 09ba5cd2fb9716f4581532a4ee1a2ca1
+      internalID: -2053089536
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_4"
+      name: player_xiadun_4
       rect:
         serializedVersion: 2
         x: 623
@@ -208,14 +234,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33f1f584692e3e9458916d20356d4ee6
-      internalID: -2040546885
+      spriteID: 9d48c156b42b1094a81582177e6fe46e
+      internalID: 1728132139
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_5"
+      name: player_xiadun_5
       rect:
         serializedVersion: 2
         x: 767
@@ -229,14 +255,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 32c14d7266566b048bb0b2248b7e69c6
-      internalID: 562728873
+      spriteID: 985b6f1559e2be54e9d7ff7029cf7408
+      internalID: 131229812
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FAE\u4FE1\u56FE\u7247_20241203215129_6"
+      name: player_xiadun_6
       rect:
         serializedVersion: 2
         x: 911
@@ -250,8 +276,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 27dff8546d0eb294398fe58530657313
-      internalID: -488966800
+      spriteID: a24abcaf082a43f41b11aefc10d42bdc
+      internalID: -170487922
       vertices: []
       indices: 
       edges: []
@@ -267,13 +293,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_0": 107274816
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_1": 375274176
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_2": 1789500370
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_3": 1917366500
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_4": -2040546885
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_5": 562728873
-      "\u5FAE\u4FE1\u56FE\u7247_20241203215129_6": -488966800
+      player_xiadun_0: 1721571928
+      player_xiadun_1: 793240754
+      player_xiadun_2: 1495537013
+      player_xiadun_3: -2053089536
+      player_xiadun_4: 1728132139
+      player_xiadun_5: 131229812
+      player_xiadun_6: -170487922
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

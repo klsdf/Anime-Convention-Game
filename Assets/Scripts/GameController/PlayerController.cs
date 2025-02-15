@@ -3,11 +3,15 @@ using JoystickPack;
 using DigitalRubyShared;
 using DG.Tweening;
 
-
-
 namespace ACG{
 public class PlayerController : MonoBehaviour
 {
+    private bool isMoving = false;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private Tween move;
+
+
     public enum InputType
     {
         Joystick,
@@ -15,18 +19,24 @@ public class PlayerController : MonoBehaviour
     }
 
     public InputType inputType;
-    [SerializeField] VariableJoystick variableJoystick;
     [SerializeField] Collider2D groundCollider;
+    [SerializeField] VariableJoystick variableJoystick;
     [Range(0.5f,6.0f)] public float speed = 1.0f;
-    Tween move;
+
     private void Start() {
         if(inputType == InputType.Gesture){
             GestureManager.Instance.RegisterGestureDelegate(GestureManager.GestureRecognizerType.SingleFingerSingleTap, MoveByFigerTap);
             variableJoystick.gameObject.SetActive(false);
         }
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Start is called before the first frame update
+    void Update()
+    {
+        OnMoveAnime();
+    }
+        // Start is called before the first frame update
     public void FixedUpdate()
     {
         if(inputType == InputType.Joystick)
@@ -37,8 +47,17 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = Vector3.up * variableJoystick.Vertical + Vector3.right * variableJoystick.Horizontal;
         var bounds = groundCollider.bounds;
         var target = transform.position + direction * speed * Time.deltaTime;
+        isMoving = direction.magnitude > 0.1f;
         if(bounds.Contains(new Vector2(target.x,target.y)))
+        {
             transform.Translate(direction * speed * Time.deltaTime);
+            spriteRenderer.flipX = direction.x < 0;
+        }
+    }
+
+    public void OnMoveAnime()
+    {
+        animator.SetBool("isRun",isMoving);
     }
 
     public void MoveByFigerTap(GestureRecognizer gesture)
