@@ -328,7 +328,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -454,7 +455,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -711,9 +713,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8693d9bc552fd4b8ee718b84c81910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cameraTexture: {fileID: 1958728331}
-  m_QRCode: {fileID: 1958728331}
-  ShiBeiResult: {fileID: 574117064}
+  cameraTextureDisplay: {fileID: 0}
+  qrCodeDisplay: {fileID: 0}
+  scanResultText: {fileID: 0}
 --- !u!1 &1153301438
 GameObject:
   m_ObjectHideFlags: 0

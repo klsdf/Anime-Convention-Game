@@ -1697,7 +1697,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b192480b44a8ab344b67c538e13419ed, type: 2}
   m_sharedMaterial: {fileID: 7898273122768699907, guid: b192480b44a8ab344b67c538e13419ed, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 7898273122768699907, guid: b192480b44a8ab344b67c538e13419ed, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -9077,7 +9078,7 @@ SpriteRenderer:
   m_Size: {x: 4.08, y: 6.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &967044712

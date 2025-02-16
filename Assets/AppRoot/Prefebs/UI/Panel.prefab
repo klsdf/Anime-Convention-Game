@@ -860,3 +860,5 @@ MonoBehaviour:
   columns: 10
   cellSize: 50
   cellPrefab: {fileID: 1423260489442767166, guid: a8c35325a2617534cb01e11bc1c2a07f, type: 3}
+  gridLineColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+  gridLineWidth: 1

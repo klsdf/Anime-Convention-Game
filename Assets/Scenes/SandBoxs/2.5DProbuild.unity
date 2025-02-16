@@ -591,7 +591,7 @@ Transform:
   m_GameObject: {fileID: 599426886}
   serializedVersion: 2
   m_LocalRotation: {x: 0.31426468, y: -0, z: -0, w: 0.94933546}
-  m_LocalPosition: {x: 27, y: 31.41, z: 6.86}
+  m_LocalPosition: {x: 50.3, y: 34.4, z: 6.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -649,8 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputType: 0
-  variableJoystick: {fileID: 1824037066}
   groundCollider: {fileID: 1882464691}
+  variableJoystick: {fileID: 1824037066}
   speed: 3.19
 --- !u!70 &751818502
 CapsuleCollider2D:
@@ -2110,7 +2110,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8518ec02cbfd2224fb34c1e3150498a1, type: 2}
   m_sharedMaterial: {fileID: -6358862375814022049, guid: 8518ec02cbfd2224fb34c1e3150498a1, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: -6358862375814022049, guid: 8518ec02cbfd2224fb34c1e3150498a1, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:

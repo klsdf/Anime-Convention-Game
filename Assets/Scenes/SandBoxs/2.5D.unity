@@ -1243,6 +1243,7 @@ MonoBehaviour:
   nowTarget: {fileID: 967044712}
   smoothTime: 0.3
   yThreshold: -1
+  boundSprite: {fileID: 0}
   dragSpeed: 20
   zoomSpeed: 20
   minZoom: 1
@@ -1604,11 +1605,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9883d7c27c7ca754dadcce0d3840cb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  side: 1
-  interactTips: {fileID: 0}
+  moveSpeed: 10
+  facingDirection: 1
   jumpHeight: 1.5
-  jumpTime: 0.7
+  jumpDuration: 0.5
+  interactionTips: {fileID: 0}
+  enableFootstepSound: 1
 --- !u!1 &1023219603
 GameObject:
   m_ObjectHideFlags: 0

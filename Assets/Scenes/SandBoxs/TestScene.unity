@@ -2211,7 +2211,7 @@ SpriteRenderer:
   m_Size: {x: 4.08, y: 6.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &967044712
@@ -2314,11 +2314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9883d7c27c7ca754dadcce0d3840cb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  side: 1
-  interactTips: {fileID: 0}
+  moveSpeed: 10
+  facingDirection: 1
   jumpHeight: 1.5
-  jumpTime: 0.7
+  jumpDuration: 0.5
+  interactionTips: {fileID: 0}
+  enableFootstepSound: 1
 --- !u!95 &967044716
 Animator:
   serializedVersion: 5
