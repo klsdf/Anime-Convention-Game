@@ -4482,7 +4482,7 @@ MonoBehaviour:
   UIPanel: {fileID: 990209514}
   closeBtn: {fileID: 1904212581}
   saveItemArea: {fileID: 1861508494}
-  playerInventoryArea: {fileID: 0}
+  playerInventoryArea: {fileID: 1601252464}
 --- !u!114 &610904249
 MonoBehaviour:
   m_ObjectHideFlags: 0
