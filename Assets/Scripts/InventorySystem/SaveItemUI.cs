@@ -16,13 +16,25 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     private Vector3 startPosition;
     private Slot startSlot;
 
-    private SaveableItemData saveableItemData;
-    public SaveableItemData SaveableItemData => saveableItemData;
+    [SerializeField]
+    public SaveableItemData saveableItemData;
 
     public void InitData(SaveableItemData saveableItemData)
     {
+        if(saveableItemData == null)
+        {
+            Debug.LogWarning("当前物品数据为null");
+            return;
+        }
         this.saveableItemData = saveableItemData;
         Sprite sprite = Resources.Load<Sprite>($"UI/Items/{saveableItemData.itemName}");
+        if (sprite == null)
+        {
+            // Debug.LogWarning($"SaveItemUI:InitData:未找到{saveableItemData.itemName}的图片");
+            // sprite = Resources.Load<Sprite>($"UI/Items/default");
+            transform.parent.GetComponent<Slot>().ClearItem();
+            return;
+        }
         GetComponent<Image>().sprite = sprite;
     }
 

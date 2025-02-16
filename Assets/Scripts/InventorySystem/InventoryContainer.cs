@@ -13,8 +13,7 @@ public class InventoryContainer : InteractObjBase
     /// 可保存物品数据列表
     /// </summary>
     [SerializeField]
-    private List<SaveableItemData> initData = new List<SaveableItemData>();
-
+    private SaveableItemDataList initData = new SaveableItemDataList(); 
 
     private void Awake() {
         InventorySystemDataController.Instance.TryRegisterInventoryContainer(this,initData);

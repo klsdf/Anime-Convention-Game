@@ -11,9 +11,14 @@ public class SaveItemArea : MonoBehaviour
     /// 初始化面板数据
     /// </summary>
     /// <param name="saveableItemDatas">可保存物品数据列表</param>
-    public void InitData(List<SaveableItemData> saveableItemDatas)
+    public void InitData(SaveableItemDataList saveableItemDatas)
     {
         ClearAllSlots();
+        if(saveableItemDatas == null)
+        {
+            Debug.LogWarning("当前容器的数据为null");
+            return;
+        }
         for (int i = 0; i < saveableItemDatas.Count; i++)
         {
             if (i < transform.childCount) // 确保有足够的Slot
@@ -43,16 +48,36 @@ public class SaveItemArea : MonoBehaviour
     }
 
 
-    public List<SaveableItemData> GetData()
+    public SaveableItemDataList GetData()
     {
-        List<SaveableItemData> saveableItemDatas = new List<SaveableItemData>();
+        SaveableItemDataList saveableItemDatas = new SaveableItemDataList();
         foreach (Transform child in transform)
         {
-            SaveItemUI saveItemUI = child.GetComponent<Slot>().item;
-            if (saveItemUI != null)
+            Slot slot = child.GetComponent<Slot>();
+            if (slot == null)
             {
-                saveableItemDatas.Add(saveItemUI.SaveableItemData);
+                Debug.LogError($"SaveItemArea:GetData:槽位{child.name}没有Slot组件");
+                continue; // 如果没有Slot组件，跳过这个子对象
             }
+
+            SaveItemUI saveItemUI = slot.item; // 访问Slot的item属性
+            if (saveItemUI == null)
+            {
+                continue; // 如果item为null，跳过这个子对象
+            }
+
+            if (saveItemUI.saveableItemData == null)
+            {
+                Debug.LogError($"SaveItemArea:GetData:槽位{child.name}的物品数据为null");
+                continue; // 如果物品数据为null，跳过这个子对象
+            }
+
+
+                var item = saveItemUI.saveableItemData;
+        
+                saveableItemDatas.Add(item);    
+                
+  
         }
         return saveableItemDatas;
     }

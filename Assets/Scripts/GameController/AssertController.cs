@@ -116,7 +116,7 @@ public class AssertController : Singleton<AssertController>
             string json = PlayerPrefs.GetString("UnlockedItems");
             SerializableAssertItems data = JsonUtility.FromJson<SerializableAssertItems>(json);
             assertItems = data.items;
-            Debug.Log("加载成功");
+            // Debug.Log("加载成功");
         }else
         {
             SaveUnlockedItems();

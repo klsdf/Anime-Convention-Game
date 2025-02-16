@@ -19,7 +19,7 @@ public class ItemSaveController : Singleton<ItemSaveController>
     public void onMoveItemUI()
     {
         // Debug.Log("onMoveItemUI");
-        List<SaveableItemData> saveableItemDatas = saveItemArea.GetData();
+        SaveableItemDataList saveableItemDatas = saveItemArea.GetData();
         InventorySystemDataController.Instance.StoreOrUpdateItemData(currentInventoryContainer, saveableItemDatas);
 
     }
@@ -39,7 +39,7 @@ public class ItemSaveController : Singleton<ItemSaveController>
     {
         currentInventoryContainer = inventoryContainer;
         InventorySystemData inventorySystemData = InventorySystemDataController.Instance.GetInventorySystemData(inventoryContainer);
-        saveItemArea.InitData(inventorySystemData.saveableItemData);
+        saveItemArea.InitData(inventorySystemData.saveableItemDataList);
         UIPanel.SetActive(true);
     }
 

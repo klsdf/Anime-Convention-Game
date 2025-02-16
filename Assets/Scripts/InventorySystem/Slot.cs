@@ -32,6 +32,7 @@ public class Slot : MonoBehaviour
     {
         if (saveableItemData == null)
         {
+            
             return;
         }
         GameObject temp = Resources.Load<GameObject>("UI/Items/ItemPrefab");

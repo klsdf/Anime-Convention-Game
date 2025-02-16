@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 
@@ -11,14 +12,25 @@ using UnityEngine;
 [System.Serializable]
 public class InventorySystemData
 {
+
     /// <summary>
-    /// 持有数据的容器的引用
+    /// 容器名称
     /// </summary>
-    public InventoryContainer inventoryContainer;
-    public List<SaveableItemData> saveableItemData;
+    [SerializeField]
+    public string inventoryContainerName;
+    /// <summary>
+    /// 可保存物品数据列表
+    /// </summary>
+    [SerializeField]
+    public SaveableItemDataList saveableItemDataList;   
 }
 
 
+[System.Serializable]
+public class ListSaveableItemDataList 
+{
+    public List<InventorySystemData> list = new List<InventorySystemData>();
+}
 /// <summary>
 /// 存储系统保存的数据的控制器
 /// </summary>
@@ -29,36 +41,41 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// 存储系统保存的数据
     /// </summary>
     [SerializeField]
-    public List<InventorySystemData> inventorySystemDataList = new List<InventorySystemData>();
+    public ListSaveableItemDataList inventorySystemDataList = new ListSaveableItemDataList();
 
+    private const string INVENTORY_SYSTEM_DATA_KEY = "InventorySystemData";
 
-
-    public void Init()
-    {
+    private void Start() {
         LoadData();
     }
 
+
+    [Button("加载数据")]
     private void LoadData()
     {
-        if (PlayerPrefs.HasKey("InventorySystemData"))
+        if (PlayerPrefs.HasKey(INVENTORY_SYSTEM_DATA_KEY))
         {
-            string json = PlayerPrefs.GetString("InventorySystemData");
-            inventorySystemDataList = JsonUtility.FromJson<List<InventorySystemData>>(json);
+            string json = PlayerPrefs.GetString(INVENTORY_SYSTEM_DATA_KEY);
+            inventorySystemDataList = JsonUtility.FromJson<ListSaveableItemDataList>(json);
+            print("加载inventory数据成功");
         }
         else
         {
+            print("没有数据，创建数据");
             SaveData();
             LoadData();
         }
     }
 
+    [Button("保存数据")]
     private void SaveData()
     {
-        string json = JsonUtility.ToJson(inventorySystemDataList);
-        PlayerPrefs.SetString("InventorySystemData", json);
-        PlayerPrefs.Save();
-    }
 
+        string json = JsonUtility.ToJson(inventorySystemDataList);
+        PlayerPrefs.SetString(INVENTORY_SYSTEM_DATA_KEY, json);
+        PlayerPrefs.Save();
+        print("保存数据成功！");
+    }
 
     /// <summary>
     /// 尝试注册容器，如果容器不存在，则注册容器
@@ -66,11 +83,14 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// <param name="inventoryContainer">容器</param>
     /// <param name="initData">初始数据</param>
     /// <returns>返回是否注册成功</returns>
-    public bool TryRegisterInventoryContainer(InventoryContainer inventoryContainer,List<SaveableItemData> initData)
+    public bool TryRegisterInventoryContainer(InventoryContainer inventoryContainer,SaveableItemDataList initData)
     {
+        //先加载一下，更新一下数据
+        LoadData();
         if (GetInventorySystemData(inventoryContainer) == null)
         {
             StoreOrUpdateItemData(inventoryContainer, initData);
+            SaveData();
             return true;
         }
         return false;
@@ -81,17 +101,18 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// </summary>
     /// <param name="name">物体名称</param>
     /// <param name="saveableItemData">可保存物品数据列表</param>
-    public void StoreOrUpdateItemData(InventoryContainer inventoryContainer, List<SaveableItemData> saveableItemData)
+    public void StoreOrUpdateItemData(InventoryContainer inventoryContainer, SaveableItemDataList saveableItemDataList)
     {
         if (GetInventorySystemData(inventoryContainer) == null)
         {
-            InventorySystemData inventorySystemData = new InventorySystemData { inventoryContainer = inventoryContainer, saveableItemData = saveableItemData }; // 存储或更新数据
-            inventorySystemDataList.Add(inventorySystemData);
+            InventorySystemData inventorySystemData = new InventorySystemData { inventoryContainerName = inventoryContainer.name, saveableItemDataList = saveableItemDataList }; // 存储或更新数据
+            inventorySystemDataList.list.Add(inventorySystemData);
         }
         else
         {
-            GetInventorySystemData(inventoryContainer).saveableItemData = saveableItemData;
+            GetInventorySystemData(inventoryContainer).saveableItemDataList = saveableItemDataList;
         }
+        SaveData();
     }
 
     /// <summary>
@@ -101,9 +122,9 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// <returns>返回对应的可保存物品数据列表</returns>
     public InventorySystemData GetInventorySystemData(InventoryContainer inventoryContainer)
     {
-        foreach (var item in inventorySystemDataList)
+        foreach (var item in inventorySystemDataList.list)
         {
-            if (item.inventoryContainer == inventoryContainer)
+            if (item.inventoryContainerName == inventoryContainer.name)
             {
                 return item; // 返回找到的数据
             }
