@@ -43,7 +43,25 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     [SerializeField]
     public ListSaveableItemDataList inventorySystemDataList = new ListSaveableItemDataList();
 
+    /// <summary>
+    /// 玩家背包数据
+    /// </summary>
+    [SerializeField]
+    public SaveableItemDataList playerInventoryDataList 
+    {
+        get
+        {
+            if(GetInventorySystemData(PLAYER_INVENTORY_DATA_KEY) == null)
+            {
+                return null;
+            }
+            return GetInventorySystemData(PLAYER_INVENTORY_DATA_KEY).saveableItemDataList;
+        }
+    }
+
     private const string INVENTORY_SYSTEM_DATA_KEY = "InventorySystemData";
+
+    public const string PLAYER_INVENTORY_DATA_KEY = "PlayerInventoryData";
 
     private void Start() {
         LoadData();
@@ -83,13 +101,13 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// <param name="inventoryContainer">容器</param>
     /// <param name="initData">初始数据</param>
     /// <returns>返回是否注册成功</returns>
-    public bool TryRegisterInventoryContainer(InventoryContainer inventoryContainer,SaveableItemDataList initData)
+    public bool TryRegisterInventoryContainer(string inventoryContainerName,SaveableItemDataList initData)
     {
         //先加载一下，更新一下数据
         LoadData();
-        if (GetInventorySystemData(inventoryContainer) == null)
+        if (GetInventorySystemData(inventoryContainerName) == null)
         {
-            StoreOrUpdateItemData(inventoryContainer, initData);
+            StoreOrUpdateItemData(inventoryContainerName, initData);
             SaveData();
             return true;
         }
@@ -101,17 +119,24 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// </summary>
     /// <param name="name">物体名称</param>
     /// <param name="saveableItemData">可保存物品数据列表</param>
-    public void StoreOrUpdateItemData(InventoryContainer inventoryContainer, SaveableItemDataList saveableItemDataList)
+    public void StoreOrUpdateItemData(string inventoryContainerName, SaveableItemDataList saveableItemDataList)
     {
-        if (GetInventorySystemData(inventoryContainer) == null)
+        if (GetInventorySystemData(inventoryContainerName) == null)
         {
-            InventorySystemData inventorySystemData = new InventorySystemData { inventoryContainerName = inventoryContainer.name, saveableItemDataList = saveableItemDataList }; // 存储或更新数据
+            InventorySystemData inventorySystemData = new InventorySystemData { inventoryContainerName = inventoryContainerName, saveableItemDataList = saveableItemDataList }; // 存储或更新数据
             inventorySystemDataList.list.Add(inventorySystemData);
         }
         else
         {
-            GetInventorySystemData(inventoryContainer).saveableItemDataList = saveableItemDataList;
+            GetInventorySystemData(inventoryContainerName).saveableItemDataList = saveableItemDataList;
         }
+        SaveData();
+    }
+
+
+    public void StoreOrUpdatePlayerInventoryData(SaveableItemDataList saveableItemDataList)
+    {
+        GetInventorySystemData(PLAYER_INVENTORY_DATA_KEY).saveableItemDataList = saveableItemDataList;
         SaveData();
     }
 
@@ -120,11 +145,11 @@ public class InventorySystemDataController:Singleton<InventorySystemDataControll
     /// </summary>
     /// <param name="name">物体名称</param>
     /// <returns>返回对应的可保存物品数据列表</returns>
-    public InventorySystemData GetInventorySystemData(InventoryContainer inventoryContainer)
+    public InventorySystemData GetInventorySystemData(string inventoryContainerName)
     {
         foreach (var item in inventorySystemDataList.list)
         {
-            if (item.inventoryContainerName == inventoryContainer.name)
+            if (item.inventoryContainerName == inventoryContainerName)
             {
                 return item; // 返回找到的数据
             }

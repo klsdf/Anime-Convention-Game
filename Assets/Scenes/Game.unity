@@ -4376,6 +4376,7 @@ GameObject:
   - component: {fileID: 610904244}
   - component: {fileID: 610904248}
   - component: {fileID: 610904249}
+  - component: {fileID: 610904250}
   m_Layer: 5
   m_Name: CanvasSaveItems
   m_TagString: Untagged
@@ -4481,6 +4482,7 @@ MonoBehaviour:
   UIPanel: {fileID: 990209514}
   closeBtn: {fileID: 1904212581}
   saveItemArea: {fileID: 1861508494}
+  playerInventoryArea: {fileID: 0}
 --- !u!114 &610904249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4493,7 +4495,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9886d17702f574ea8c4cfc15b2df43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySystemDataList: []
+  inventorySystemDataList:
+    list: []
+--- !u!114 &610904250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610904243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd8a402e27023448ba47a7b88456963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initData:
+    saveableItemDataList: []
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -13670,6 +13687,7 @@ GameObject:
   - component: {fileID: 1601252463}
   - component: {fileID: 1601252462}
   - component: {fileID: 1601252461}
+  - component: {fileID: 1601252464}
   m_Layer: 5
   m_Name: PlayerBagArea
   m_TagString: Untagged
@@ -13778,6 +13796,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1601252459}
   m_CullTransparentMesh: 1
+--- !u!114 &1601252464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601252459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c725662546d71a5429e2732aad3c7e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1604217605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18154,6 +18184,10 @@ PrefabInstance:
     - target: {fileID: 300683696086421203, guid: 39b53b6cef40a0544bbb256f99c28596, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1398665147788208426, guid: 39b53b6cef40a0544bbb256f99c28596, type: 3}
+      propertyPath: item
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4315723190892724806, guid: 39b53b6cef40a0544bbb256f99c28596, type: 3}
       propertyPath: m_Name

@@ -12,7 +12,15 @@ public class ItemSaveController : Singleton<ItemSaveController>
 {
     public GameObject UIPanel;
     public Button closeBtn;
+
+    /// <summary>
+    /// 箱子和存储柜的区域
+    /// </summary>
     public SaveItemArea saveItemArea;
+    /// <summary>
+    /// 玩家背包的区域
+    /// </summary>
+    public SaveItemArea playerInventoryArea;
     InventoryContainer currentInventoryContainer;
 
     // public Action onMoveItemUI;
@@ -20,7 +28,9 @@ public class ItemSaveController : Singleton<ItemSaveController>
     {
         // Debug.Log("onMoveItemUI");
         SaveableItemDataList saveableItemDatas = saveItemArea.GetData();
-        InventorySystemDataController.Instance.StoreOrUpdateItemData(currentInventoryContainer, saveableItemDatas);
+        SaveableItemDataList playerInventoryDatas = playerInventoryArea.GetData();
+        InventorySystemDataController.Instance.StoreOrUpdateItemData(currentInventoryContainer.name, saveableItemDatas);
+        InventorySystemDataController.Instance.StoreOrUpdatePlayerInventoryData(playerInventoryDatas);
 
     }
     private void Awake()
@@ -38,8 +48,10 @@ public class ItemSaveController : Singleton<ItemSaveController>
     public void OpenUI(InventoryContainer inventoryContainer)
     {
         currentInventoryContainer = inventoryContainer;
-        InventorySystemData inventorySystemData = InventorySystemDataController.Instance.GetInventorySystemData(inventoryContainer);
+        InventorySystemData inventorySystemData = InventorySystemDataController.Instance.GetInventorySystemData(inventoryContainer.name);
         saveItemArea.InitData(inventorySystemData.saveableItemDataList);
+        playerInventoryArea.InitData(InventorySystemDataController.Instance.playerInventoryDataList);
+
         UIPanel.SetActive(true);
     }
 

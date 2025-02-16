@@ -16,7 +16,7 @@ public class InventoryContainer : InteractObjBase
     private SaveableItemDataList initData = new SaveableItemDataList(); 
 
     private void Awake() {
-        InventorySystemDataController.Instance.TryRegisterInventoryContainer(this,initData);
+        InventorySystemDataController.Instance.TryRegisterInventoryContainer(gameObject.name,initData);
     }
 
     
