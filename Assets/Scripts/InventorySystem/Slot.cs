@@ -4,6 +4,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 槽位，用于保存物品
+/// </summary>
 public class Slot : MonoBehaviour
 {
     public SaveItemUI item; // 物品
@@ -27,12 +30,21 @@ public class Slot : MonoBehaviour
 
     public void CreateItem(SaveableItemData saveableItemData)
     {
+        if (saveableItemData == null)
+        {
+            return;
+        }
         GameObject temp = Resources.Load<GameObject>("UI/Items/ItemPrefab");
         temp = Instantiate(temp, transform.position, Quaternion.identity);
+        temp.name = saveableItemData.itemName;
         temp.transform.SetParent(transform);
         item = temp.GetComponent<SaveItemUI>();
+        item.InitData(saveableItemData);
+    }
 
-        item.UpdateItem(saveableItemData);
+    public void ClearItemReference()
+    {
+        item = null;
     }
 
 

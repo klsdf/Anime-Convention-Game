@@ -16,8 +16,12 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     private Vector3 startPosition;
     private Slot startSlot;
 
-    public void UpdateItem(SaveableItemData saveableItemData)
+    private SaveableItemData saveableItemData;
+    public SaveableItemData SaveableItemData => saveableItemData;
+
+    public void InitData(SaveableItemData saveableItemData)
     {
+        this.saveableItemData = saveableItemData;
         Sprite sprite = Resources.Load<Sprite>($"UI/Items/{saveableItemData.itemName}");
         GetComponent<Image>().sprite = sprite;
     }
@@ -57,7 +61,10 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         {
             ResetPosition();
         }
+        ItemSaveController.Instance.onMoveItemUI();
     }
+
+    
     /// <summary>
     /// 获取鼠标下的 Slot
     /// </summary>
@@ -82,7 +89,8 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         // print("移动到目标格子");
 
         newSlot.SetItem(this);
-        // startSlot.ClearItem();
+        startSlot.ClearItemReference();
+
     }
     private void OnDestroy() {
         // print("我g了");
