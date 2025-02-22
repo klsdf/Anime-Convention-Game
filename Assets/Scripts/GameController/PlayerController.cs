@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     }
     public void MoveByJoystick()
     {
-        Vector3 direction = Vector3.right * variableJoystick.Vertical + Vector3.back * variableJoystick.Horizontal;
+        Vector3 direction = Vector3.left * variableJoystick.Vertical + Vector3.forward * variableJoystick.Horizontal;
         isMoving = direction.magnitude > 0.1f;
         rb.velocity = direction * speed;
         spriteRenderer.flipX = direction.x < 0;
