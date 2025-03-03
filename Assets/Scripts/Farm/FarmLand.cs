@@ -61,6 +61,6 @@ public class FarmLand : MonoBehaviour
     public void SelectLand(bool toggle)
     {
         select.SetActive(toggle);
-        Debug.Log("选中地块");
+       
     }
 }
