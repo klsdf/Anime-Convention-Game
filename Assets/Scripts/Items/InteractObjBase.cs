@@ -11,19 +11,37 @@ public class InteractObjBase : MonoBehaviour
     }
 
 
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
+ 
+
+    public void OnCollisionEnter(Collision other) {
+        if (other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<DemoCharacterController>().SetInteractObject(this.gameObject);
+            other.gameObject.GetComponent<PlayerInteractController>().SetInteractObject(this.gameObject);
         }
     }
 
-    public void OnTriggerExit2D(Collider2D other)
+
+    public void OnCollisionExit(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<DemoCharacterController>().ClearInteractObject();
+            other.gameObject.GetComponent<PlayerInteractController>().ClearInteractObject();
         }
     }
+
+    // public void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         other.GetComponent<DemoCharacterController>().SetInteractObject(this.gameObject);
+    //     }
+    // }
+
+    // public void OnTriggerExit2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         other.GetComponent<DemoCharacterController>().ClearInteractObject();
+    //     }
+    // }
 }
