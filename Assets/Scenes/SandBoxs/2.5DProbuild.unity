@@ -35124,7 +35124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1313338453814478471, guid: ba4f6cdcd4d814b43b724a8ebe8784a7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 124.2
+      value: 123.57
       objectReference: {fileID: 0}
     - target: {fileID: 1313338453814478471, guid: ba4f6cdcd4d814b43b724a8ebe8784a7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -49814,7 +49814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1313338453814478471, guid: ba4f6cdcd4d814b43b724a8ebe8784a7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 124.2
+      value: 123.57
       objectReference: {fileID: 0}
     - target: {fileID: 1313338453814478471, guid: ba4f6cdcd4d814b43b724a8ebe8784a7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -51828,6 +51828,7 @@ MonoBehaviour:
   farmlandLayer:
     serializedVersion: 2
     m_Bits: 1024
+  selectedCropData: {fileID: 11400000, guid: 6136cf6fe1cc0844baf750b1fbbaa4d9, type: 2}
 --- !u!114 &2134234822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52402,7 +52403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7283293119386351812, guid: c3d3e84a8739363449d2fe96a025165f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.42
+      value: 0.91
       objectReference: {fileID: 0}
     - target: {fileID: 7283293119386351812, guid: c3d3e84a8739363449d2fe96a025165f, type: 3}
       propertyPath: m_LocalPosition.z

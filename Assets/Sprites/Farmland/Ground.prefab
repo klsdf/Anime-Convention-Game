@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4013645048856433114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
-  m_LocalScale: {x: 0.9650804, y: 0.681184, z: 0.98531425}
+  m_LocalPosition: {x: 0, y: 0.59, z: 0}
+  m_LocalScale: {x: 0.34378093, y: 0.28698963, z: 0.33176517}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1313338453814478471}
@@ -229,3 +229,4 @@ MonoBehaviour:
   farmlandMat: {fileID: 2100000, guid: 86e59f2c0e16be848a0f7114f564b665, type: 2}
   WaterMat: {fileID: 2100000, guid: 54db87bbc195a124a9f8cd93decfe12a, type: 2}
   select: {fileID: 4013645048856433114}
+  cropData: {fileID: 0}

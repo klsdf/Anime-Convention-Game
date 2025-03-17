@@ -15,6 +15,7 @@ public class PlayerFarming : MonoBehaviour
     public LayerMask farmlandLayer;
     private bool isOnFarmland = false;
     private List<Collider> currentFarmlands = new List<Collider>();
+    public CropsData selectedCropData;   // 玩家选择的作物数据（可从UI或背包系统获取）   
 
     void Update()
     {
@@ -47,10 +48,22 @@ public class PlayerFarming : MonoBehaviour
                             plot.SwitchLandStatus(FarmLand.LandState.Water);
                             ///这里可以加入一个浇水动画
                         }
+                     
+                        else if(plot.landState == FarmLand.LandState.Water)
+                        {
+                            ///种植
+                            ///初始的种植之后会调用数据库中的种子
+                            TryPlantCrop(plot);
+                            Debug.Log("种植");
+                            ///这里可以加入一个种植动画
+                            ///这里可以加入一个种植音效 
+                            ///这里可以加入一个种植特效
+                        }
                     }
                 }
             }
         }
+      
 
         // 处理currentFarmlands列表中的对象
         foreach (Collider collider in currentFarmlands)
@@ -100,6 +113,23 @@ public class PlayerFarming : MonoBehaviour
             }
         }
     }
+    
+     private void TryPlantCrop(FarmLand farmLand)
+    {
+
+                if (farmLand != null && selectedCropData != null)
+                {
+                    // 调用FarmLand的PlantCrop方法
+                    farmLand.PlantCrop(selectedCropData);
+                }
+                else
+                {
+                    Debug.Log("未选择作物或目标不是耕地！");
+                }
+        
+    }
+
+
     /*
     void Update()
     {

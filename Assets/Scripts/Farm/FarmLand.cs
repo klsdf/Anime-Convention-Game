@@ -88,24 +88,39 @@ public class FarmLand : MonoBehaviour
     public void PlantCrop(CropsData data)
     {
         // 如果土地状态不是Soil，则可以种植
-        if(landState != LandState.Soil && !isPlanted)
+        if(landState == LandState.Water && !isPlanted)
         {
-            cropData = data;
-            isPlanted = true;
-            // 创建作物预制体
-            GameObject crop = Instantiate(cropData.prefab, transform.position, Quaternion.identity);
-            // 设置作物预制体为土地的子物体
-            crop.transform.SetParent(transform);
-            // 添加作物行为组件
-            currentCrop = crop.GetComponent<CropBehavior>();
-            // 设置作物数据
-            currentCrop.cropData = cropData;
-        }
-        else
+            if (data.prefab == null)
+            {
+                Debug.LogError("错误：作物预制体未配置！");
+                return;
+            }
+           
+        // 生成作物（调整Y轴高度）
+        Vector3 spawnPosition = transform.position + Vector3.up * 0.5f;
+        GameObject crop = Instantiate(data.prefab, spawnPosition, Quaternion.identity);
+        
+        // 可选：设为土地的子物体（确保土地缩放为1）
+        crop.transform.SetParent(transform);
+
+        currentCrop = crop.GetComponent<CropBehavior>();
+        if (currentCrop == null)
         {
-            Debug.Log("土地状态不能种植");
+            Debug.LogError("作物预制体缺少 CropBehavior 组件！");
+            Destroy(crop);
+            isPlanted = false;
+            landState = LandState.Water; // 回滚状态
+            return;
         }
 
-        
+        // 更新土地状态和种植标记
+        isPlanted = true;
+        currentCrop.cropData = data;
+        Debug.Log("成功种植: " + cropData.name);
+    }
+    else
+    {
+        Debug.Log("土地状态不能种植");
+    }
     }
 }

@@ -5,24 +5,27 @@ using UnityEngine;
 public class CropBehavior : MonoBehaviour
 {
     public CropsData cropData; // 作物数据
-    private int currentStage = 0; // 当前生长阶段
-    private float growthProgress = 0f; // 生长进度
+    private int currentStage; // 当前生长阶段
+    private float growthProgress; // 生长进度
 
     void Start()
     {
         // 初始化作物，显示第一阶段模型
         UpdateStageModel();
+        growthProgress = 0f;
+        currentStage = 0;
     }
 
     void Update()
     {
         // 如果作物未成熟，则更新生长进度   
-        if (currentStage < cropData.growthStages.Length - 1)
-        {
+        if (cropData == null || currentStage >= cropData.growthStages.Length - 1)
+            return;
+
+        growthProgress += Time.deltaTime;
             // 更新生长进度
             // 这个功能暂定为用游戏时间来更新生长进度
             // 之后应该会尝试去获取现实时间来更新生长进度
-            growthProgress += Time.deltaTime;
 
             // 检查是否需要切换到下一个阶段
             if (growthProgress >= cropData.growthTime / cropData.growthStages.Length)
@@ -30,8 +33,9 @@ public class CropBehavior : MonoBehaviour
                 currentStage++;
                 UpdateStageModel();
                 growthProgress = 0f; // 重置生长进度
+                Debug.Log($"进入阶段 {currentStage}");
             }
-        }
+        
     }
 
     // 更新当前阶段的模型
