@@ -12,9 +12,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemDate/Seed")]
 public class CropsData : ItemData
 {
-    public float growthTime; // 总生长时间（秒）
-    public GameObject[] growthStages; // 各阶段模型 
-    public int harvestCount; // 收获数量
-    public int seedPrice; // 种子价格
+    public float[] timePerStage; // 每个阶段的生长时间
+    public int harvestReward;   // 收割奖励（例如金币）
+    public float witherTime = 10f; // 成熟后枯萎时间（可选）
 }
 
