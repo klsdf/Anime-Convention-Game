@@ -15,7 +15,8 @@ public class PlayerFarming : MonoBehaviour
     public LayerMask farmlandLayer;
     private bool isOnFarmland = false;
     private List<Collider> currentFarmlands = new List<Collider>();
-    public CropsData selectedCropData;   // 玩家选择的作物数据（可从UI或背包系统获取）   
+    public CropsData selectedCropData;   // 玩家选择的作物数据（可从UI或背包系统获取）应该调用背包系统里的种子数据
+    private CropBehavior currentCropSelected;
 
     void Update()
     {
@@ -59,10 +60,23 @@ public class PlayerFarming : MonoBehaviour
                             ///这里可以加入一个种植音效 
                             ///这里可以加入一个种植特效
                         }
+                        else if(plot.landState == FarmLand.LandState.Occupied)
+                        {
+                            ///获取作物
+                            currentCropSelected = plot.transform.GetChild(1).GetComponent<CropBehavior>();
+                            if (currentCropSelected != null)
+                            {
+                                currentCropSelected.Harvest();
+                                
+                            
+                                Debug.Log("收割");
+                                // 这里可以加入一个收割动画
+                                // 这里可以加入一个收割音效
+                            }
+                        }
                     }
                 }
             }
-        }
       
 
         // 处理currentFarmlands列表中的对象
@@ -75,6 +89,7 @@ public class PlayerFarming : MonoBehaviour
                
             }
         }
+    }
     }
      
     /// <summary>
@@ -117,15 +132,15 @@ public class PlayerFarming : MonoBehaviour
      private void TryPlantCrop(FarmLand farmLand)
     {
 
-                if (farmLand != null && selectedCropData != null)
-                {
-                    // 调用FarmLand的PlantCrop方法
-                    farmLand.PlantCrop(selectedCropData);
-                }
-                else
-                {
-                    Debug.Log("未选择作物或目标不是耕地！");
-                }
+        if (farmLand != null && selectedCropData != null)
+        {
+                        // 调用FarmLand的PlantCrop方法
+            farmLand.PlantCrop(selectedCropData);
+        }
+            else
+        {
+            Debug.Log("未选择作物或目标不是耕地！");
+        }
         
     }
 

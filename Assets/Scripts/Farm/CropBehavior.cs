@@ -20,6 +20,7 @@ public class CropBehavior : MonoBehaviour
     private int currentStage;       // 当前生长阶段
     private float growthProgress;   // 生长进度
     private float matureTimer;      // 成熟后计时器（用于枯萎逻辑）
+    private FarmLand parentFarmLand; // 父对象 FarmLand
 
     void Start()
     {
@@ -27,6 +28,16 @@ public class CropBehavior : MonoBehaviour
         {
             Debug.LogError("作物数据或阶段模型未设置！");
             return;
+        }
+        parentFarmLand = GetComponentInParent<FarmLand>();
+        if (parentFarmLand == null)
+        {
+            Debug.LogError("父对象 FarmLand 未设置！");
+            return;
+        } 
+        else
+        {
+            Debug.Log("父对象 FarmLand 已设置！");
         }
 
         // 初始状态：播种
@@ -65,11 +76,14 @@ public class CropBehavior : MonoBehaviour
                  //枯萎状态，不可收割
                 Debug.Log("作物已枯萎，不可收割！");
                 Destroy(gameObject);
+                ResetLand();
                 break;
         }
     }
 
-    // 更新生长逻辑
+    /// <summary>
+    /// 更新生长逻辑
+    /// </summary>
     void UpdateGrowth()
     {
         if (currentStage >= growthStages.Length - 1)
@@ -81,7 +95,7 @@ public class CropBehavior : MonoBehaviour
         }
 
         growthProgress += Time.deltaTime;
-        Debug.Log($"当前生长进度: {growthProgress}");
+        //Debug.Log($"当前生长进度: {growthProgress}");
 
         if (growthProgress >= cropData.timePerStage[currentStage])
         {
@@ -122,7 +136,10 @@ public class CropBehavior : MonoBehaviour
         return currentState == CropState.Mature;
     }
 
-    // 收割作物
+    /// <summary>
+    /// 收割作物
+    /// 在 playerFarming 脚本中调用
+    /// </summary>
     public void Harvest()
     {
         if (IsReadyToHarvest())
@@ -131,11 +148,21 @@ public class CropBehavior : MonoBehaviour
             // 增加玩家资源
             //PlayerInventory.AddResource(cropData.harvestReward);
             Destroy(gameObject); // 销毁作物
+            ResetLand();
         }
         else
         {
             Debug.Log("作物尚未成熟，无法收割！");
         }
+    }
+    /// <summary>
+    /// 重置土地状态
+    /// 调用FarmLand脚本中的SwitchLandStatus方法和isLand
+    /// </summary>
+    public void ResetLand()
+    {
+        parentFarmLand.SwitchLandStatus(FarmLand.LandState.Soil);
+        parentFarmLand.isPlanted = false;   
     }
 }
 

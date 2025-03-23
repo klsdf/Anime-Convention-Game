@@ -14,7 +14,8 @@ public class FarmLand : MonoBehaviour
     {
         Soil,
         Farmland,
-        Water
+        Water,
+        Occupied
     }
     // Start is called before the first frame update
     public LandState landState;
@@ -42,7 +43,8 @@ public class FarmLand : MonoBehaviour
     /// <summary>
     /// 是否种植作物在这个土地上
     /// </summary>
-    private bool isPlanted = false;
+    [HideInInspector]
+    public bool isPlanted = false;
 
     /// <summary>
     /// 种植的作物
@@ -104,6 +106,8 @@ public class FarmLand : MonoBehaviour
         crop.transform.SetParent(transform);
 
         currentCrop = crop.GetComponent<CropBehavior>();
+        /// 更新土地状态
+        landState = LandState.Occupied;
         if (currentCrop == null)
         {
             Debug.LogError("作物预制体缺少 CropBehavior 组件！");
@@ -117,10 +121,24 @@ public class FarmLand : MonoBehaviour
         isPlanted = true;
         currentCrop.cropData = data;
         Debug.Log("成功种植: " + cropData.name);
+        }
+        else
+        {
+            Debug.Log("土地状态不能种植");
+        }
     }
-    else
+    /*
+    /// <summary>
+    /// 获得土地植物的状态，调用Crop
+    /// 检测是否成熟
+    /// </summary>
+    public void CheckCropState()
     {
-        Debug.Log("土地状态不能种植");
+        if(!isHarvest && currentCrop.IsReadyToHarvest())
+        {
+            Debug.Log("作物成熟");
+            isHarvest = true;
+        }
     }
-    }
+    */
 }
