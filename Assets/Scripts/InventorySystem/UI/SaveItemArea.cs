@@ -47,7 +47,10 @@ public class SaveItemArea : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 获取保存的物品数据
+    /// </summary>
+    /// <returns>保存的物品数据列表</returns>
     public SaveableItemDataList GetData()
     {
         SaveableItemDataList saveableItemDatas = new SaveableItemDataList();

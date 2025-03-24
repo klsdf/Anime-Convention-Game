@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0067b7d482ce91248b607742c6dff23c, type: 3}
+  m_Name: tomatoitem
+  m_EditorClassIdentifier: 
+  saveableItemData:
+    itemName: 
+    itemCount: 0
+    itemType: 0
+    _cropData: {fileID: 0}
+  prefab: {fileID: 0}
+  timePerStage: []
+  harvestReward: 0
+  witherTime: 10
+  regrowable: 0
+  regrowCount: 1
+  regrowDelay: 10

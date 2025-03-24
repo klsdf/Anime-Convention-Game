@@ -15,9 +15,15 @@ public class PlayerFarming : MonoBehaviour
     public LayerMask farmlandLayer;
     private bool isOnFarmland = false;
     private List<Collider> currentFarmlands = new List<Collider>();
-    public CropsData selectedCropData;   // 玩家选择的作物数据（可从UI或背包系统获取）应该调用背包系统里的种子数据
+
+
+    private CropsData selectedCropData;   // 玩家选择的作物数据（可从UI或背包系统获取）应该调用背包系统里的种子数据
+    public CropsData SelectedCrop => selectedCropData; // 只读属性
     private CropBehavior currentCropSelected;
 
+    /// <summary>
+    /// 更新 
+    /// </summary>
     void Update()
     {
         /// 检测玩家是否在耕地范围内    
@@ -55,6 +61,7 @@ public class PlayerFarming : MonoBehaviour
                             ///种植
                             ///初始的种植之后会调用数据库中的种子
                             TryPlantCrop(plot);
+
                             Debug.Log("种植");
                             ///这里可以加入一个种植动画
                             ///这里可以加入一个种植音效 
@@ -66,9 +73,7 @@ public class PlayerFarming : MonoBehaviour
                             currentCropSelected = plot.transform.GetChild(1).GetComponent<CropBehavior>();
                             if (currentCropSelected != null)
                             {
-                                currentCropSelected.Harvest();
-                                
-                            
+                                currentCropSelected.Harvest();                                                       
                                 Debug.Log("收割");
                                 // 这里可以加入一个收割动画
                                 // 这里可以加入一个收割音效
@@ -79,17 +84,17 @@ public class PlayerFarming : MonoBehaviour
             }
       
 
-        // 处理currentFarmlands列表中的对象
-        foreach (Collider collider in currentFarmlands)
-        {
-            FarmLand farmLand = collider.GetComponent<FarmLand>();
-            if (farmLand != null)
+            // 处理currentFarmlands列表中的对象
+            foreach (Collider collider in currentFarmlands)
             {
-                farmLand.SelectLand(true); // 调用SelectLand方法
-               
+                FarmLand farmLand = collider.GetComponent<FarmLand>();
+                if (farmLand != null)
+                {
+                    farmLand.SelectLand(true); // 调用SelectLand方法
+                
+                }
             }
         }
-    }
     }
      
     /// <summary>
@@ -143,35 +148,40 @@ public class PlayerFarming : MonoBehaviour
         }
         
     }
-
-
-    /*
-    void Update()
+    
+    /// <summary>
+    /// 直接从SaveItemUI调用的选择方法（已跳过前置检查）
+    /// </summary>
+    public void SelectSeedFromInventory(SaveableItemData seedItem)
     {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            
-            // 仅在触碰开始时检测
-            if (touch.phase == TouchPhase.Began)
-            {
-                Ray ray = playerCamera.ScreenPointToRay(touch.position);
-                RaycastHit hit;
-                
-                if (Physics.Raycast(ray, out hit, 100f, farmlandLayer))
-                {
-                    FarmLand plot = hit.collider.GetComponent<FarmLand>();
-                    // ...原有耕地/种植逻辑
-                    plot.SelectLand(true);  
-                    Debug.Log("触发方块");
-                }
-                else
-                {
-                    FarmLand plot = hit.collider.GetComponent<FarmLand>();
-                    plot.SelectLand(false);
-                }
-            }
-        }
+        // 直接信任传入的数据（因为SaveItemUI已验证）
+        selectedCropData = seedItem._cropData;
+        Debug.Log($"种子选中: {selectedCropData.saveableItemData.itemName}");
+        
+        // 可选：触发选中事件
+        // OnSeedSelected?.Invoke(_selectedCropData);
     }
-    */
+    /// <summary>
+    /// 清除当前选择
+    /// </summary>
+    public void ClearSelection()
+    {
+        selectedCropData = null;
+    }
+
+    /// <summary>
+    /// 尝试种植当前选中的种子
+    /// </summary>
+    public bool TryPlantSelectedSeed(FarmLand targetLand)
+    {
+        if (selectedCropData == null || targetLand == null)
+            return false;
+
+        targetLand.PlantCrop(selectedCropData);
+        ClearSelection();
+        return true;
+    }
+
+
+
 }

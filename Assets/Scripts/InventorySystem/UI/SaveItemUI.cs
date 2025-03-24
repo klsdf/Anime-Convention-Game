@@ -10,14 +10,26 @@ using System.Collections.Generic;
 /// <summary>
 /// 可以被拖拽的UI元素
 /// </summary>
-public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    private Transform originalParent;
+   private Transform originalParent;
     private Vector3 startPosition;
     private Slot startSlot;
+    private float dragStartTime =-1f; // 用于区分点击和拖拽
+    private CanvasGroup canvasGroup;
 
     [SerializeField]
     public SaveableItemData saveableItemData;
+
+    private void Awake()
+    {
+        // 添加或获取CanvasGroup组件
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
 
     public void InitData(SaveableItemData saveableItemData)
     {
@@ -30,29 +42,60 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         Sprite sprite = Resources.Load<Sprite>($"UI/Items/{saveableItemData.itemName}");
         if (sprite == null)
         {
-            // Debug.LogWarning($"SaveItemUI:InitData:未找到{saveableItemData.itemName}的图片");
-            // sprite = Resources.Load<Sprite>($"UI/Items/default");
             transform.parent.GetComponent<Slot>().ClearItem();
             return;
         }
         GetComponent<Image>().sprite = sprite;
     }
 
+    // 点击选择逻辑
+    public void OnPointerClick(PointerEventData eventData)
+    {
+         Debug.Log("点击事件触发"); // 测试用
+        // 如果拖拽时间超过0.15秒，则不认为是点击
+         if (dragStartTime < 0 || Time.time - dragStartTime > 0.15f)
+        {
+            if (saveableItemData != null && saveableItemData.isSeed())
+            {
+                PlayerFarming playerFarming = FindObjectOfType<PlayerFarming>();
+                if (playerFarming != null)
+                {
+                    Debug.Log($"选中种子: {saveableItemData.itemName}");
+                    playerFarming.SelectSeedFromInventory(saveableItemData);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("操作被识别为拖拽，忽略点击");
+        }
+        
+        dragStartTime = -1f; // 重置状态
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        dragStartTime = Time.time; // 记录拖拽开始时间
+        
         startPosition = transform.position;
         originalParent = transform.parent;
         startSlot = originalParent.GetComponent<Slot>();
-        transform.SetParent(originalParent.root); // 让物品在最高层级
+        transform.SetParent(originalParent.root);
+        
+        // 临时禁用射线阻挡，允许检测下层对象
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition; // 跟随鼠标
+        transform.position = eventData.position; // 使用eventData.position更准确
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 恢复射线阻挡
+        canvasGroup.blocksRaycasts = true;
+        
         Slot targetSlot = GetSlotUnderMouse(eventData);
 
         if (targetSlot == null) // 没拖到有效格子
@@ -73,13 +116,13 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         {
             ResetPosition();
         }
-        ItemSaveController.Instance.onMoveItemUI();
+        
+        if (ItemSaveController.Instance != null)
+        {
+            ItemSaveController.Instance.onMoveItemUI();
+        }
     }
 
-    
-    /// <summary>
-    /// 获取鼠标下的 Slot
-    /// </summary>
     private Slot GetSlotUnderMouse(PointerEventData eventData)
     {
         List<RaycastResult> results = new List<RaycastResult>();
@@ -98,14 +141,8 @@ public class SaveItemUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     private void MoveToSlot(Slot newSlot)
     {
-        // print("移动到目标格子");
-
         newSlot.SetItem(this);
         startSlot.ClearItemReference();
-
-    }
-    private void OnDestroy() {
-        // print("我g了");
     }
 
     private void SwapItems(Slot targetSlot)

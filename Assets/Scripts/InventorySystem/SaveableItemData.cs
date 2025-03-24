@@ -16,7 +16,33 @@ public class SaveableItemData
     /// 物品数量
     /// </summary>
     public int itemCount;
+
+    public SaveableItemType itemType;
+
+    // 私有字段，隐藏 CropsData
+    public CropsData _cropData;
+
+    /// <summary>
+    /// 是否是种子
+    /// </summary>
+    /// <returns></returns>
+    public bool isSeed(){
+        return itemType == SaveableItemType.Seed;
+    }
+    
+    
+
 }
+
+public enum SaveableItemType
+{
+    Seed,
+    Crop,
+    Tool,
+    Furniture,
+}
+
+
 
 
 [Serializable]
