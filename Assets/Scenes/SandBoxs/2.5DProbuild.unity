@@ -53032,7 +53032,6 @@ MonoBehaviour:
   farmlandLayer:
     serializedVersion: 2
     m_Bits: 1024
-  selectedCropData: {fileID: 11400000, guid: 6136cf6fe1cc0844baf750b1fbbaa4d9, type: 2}
 --- !u!114 &2134234822
 MonoBehaviour:
   m_ObjectHideFlags: 0
