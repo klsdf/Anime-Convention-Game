@@ -17,10 +17,13 @@ MonoBehaviour:
     itemCount: 0
     itemType: 0
     _cropData: {fileID: 0}
-  prefab: {fileID: 0}
-  timePerStage: []
+  prefab: {fileID: 1406632931875702921, guid: b0ce47bdb981ef943ac24ffe2a631a84, type: 3}
+  timePerStage:
+  - 4
+  - 6
+  - 10
   harvestReward: 0
-  witherTime: 10
-  regrowable: 0
-  regrowCount: 1
+  witherTime: 20
+  regrowable: 1
+  regrowCount: 4
   regrowDelay: 10

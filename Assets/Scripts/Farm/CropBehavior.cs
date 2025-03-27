@@ -9,52 +9,59 @@ public class CropBehavior : MonoBehaviour
     {
         Planted,  // 播种
         Growing,  // 生长
-        Mature,   // 成熟
-        Withered // 枯萎（可选）
+        Mature,   // 成熟（可收割）
+        Regrowing, // 再生中
+        Withered // 枯萎
     }
 
-    public CropsData cropData; // 作物数据
-    public GameObject[] growthStages; // 每个阶段的模型
+    public CropsData cropData;
+    public GameObject[] growthStages;
 
-    private CropState currentState; // 当前状态
-    private int currentStage;       // 当前生长阶段
-    private float growthProgress;   // 生长进度
-    private float matureTimer;      // 成熟后计时器（用于枯萎逻辑）
-    private FarmLand parentFarmLand; // 父对象 FarmLand
+    private CropState currentState;
+    private int currentStage;
+    private float growthProgress;
+    private float stateTimer; // 通用状态计时器
+    private int remainingHarvests;
+    private FarmLand parentFarmLand;
 
     void Start()
+    {
+        InitializeCrop();
+    }
+
+    private void InitializeCrop()
+    {
+        parentFarmLand = GetComponentInParent<FarmLand>();
+        if (!ValidateComponents()) return;
+
+        currentState = CropState.Planted;
+        currentStage = 0;
+        growthProgress = 0f;
+        remainingHarvests = cropData.regrowable ? cropData.regrowCount + 1 : 1;
+        UpdateStageModel();
+    }
+
+    private bool ValidateComponents()
     {
         if (cropData == null || growthStages == null || growthStages.Length == 0)
         {
             Debug.LogError("作物数据或阶段模型未设置！");
-            return;
+            return false;
         }
-        parentFarmLand = GetComponentInParent<FarmLand>();
         if (parentFarmLand == null)
         {
             Debug.LogError("父对象 FarmLand 未设置！");
-            return;
-        } 
-        else
-        {
-            Debug.Log("父对象 FarmLand 已设置！");
+            return false;
         }
-
-        // 初始状态：播种
-        currentState = CropState.Planted;
-        currentStage = 0;
-        growthProgress = 0f;
-        UpdateStageModel();
+        return true;
     }
 
     void Update()
     {
-        // 根据当前状态执行逻辑
         switch (currentState)
         {
             case CropState.Planted:
-                // 播种后进入生长状态
-                currentState = CropState.Growing;
+                TransitionToState(CropState.Growing);
                 break;
 
             case CropState.Growing:
@@ -62,107 +69,130 @@ public class CropBehavior : MonoBehaviour
                 break;
 
             case CropState.Mature:
-                // 成熟状态，检查是否枯萎
-                matureTimer += Time.deltaTime;
-                if (matureTimer > cropData.witherTime)
-                {
-                    currentState = CropState.Withered;
-                    UpdateStageModel();
-                    Debug.Log("作物已枯萎！");
-                }
+                UpdateMatureState();
+                break;
+
+            case CropState.Regrowing:
+                UpdateRegrowth();
                 break;
 
             case CropState.Withered:
-                 //枯萎状态，不可收割
-                Debug.Log("作物已枯萎，不可收割！");
-                Destroy(gameObject);
-                ResetLand();
+                HandleWitheredState();
                 break;
         }
     }
 
-    /// <summary>
-    /// 更新生长逻辑
-    /// </summary>
-    void UpdateGrowth()
+    private void UpdateGrowth()
     {
-        if (currentStage >= growthStages.Length - 1)
-        {
-            // 生长完成，进入成熟状态
-            currentState = CropState.Mature;
-            Debug.Log("作物已成熟！");
-            return;
-        }
-
         growthProgress += Time.deltaTime;
-        //Debug.Log($"当前生长进度: {growthProgress}");
 
         if (growthProgress >= cropData.timePerStage[currentStage])
         {
-            currentStage++;
-            UpdateStageModel();
             growthProgress = 0f;
-            Debug.Log($"进入阶段 {currentStage}");
-        }
-    }
+            currentStage++;
 
-    // 更新当前阶段的模型
-    void UpdateStageModel()
-    {
-        // 隐藏所有阶段的模型
-        for (int i = 0; i < growthStages.Length; i++)
-        {
-            if (growthStages[i] != null)
+            if (currentStage >= growthStages.Length - 1)
             {
-                growthStages[i].SetActive(false);
+                TransitionToState(CropState.Mature);
+            }
+            else
+            {
+                UpdateStageModel();
             }
         }
-
-        // 显示当前阶段的模型
-        if (growthStages[currentStage] != null)
-        {
-            growthStages[currentStage].SetActive(true);
-            Debug.Log($"显示阶段模型: {growthStages[currentStage].name}");
-        }
-        else
-        {
-            Debug.LogError($"阶段 {currentStage} 的模型未配置！");
-        }
     }
 
-    // 检查作物是否成熟
-    public bool IsReadyToHarvest()
+    private void UpdateMatureState()
     {
-        return currentState == CropState.Mature;
+        stateTimer += Time.deltaTime;
+        if (stateTimer > cropData.witherTime)
+        {
+            TransitionToState(CropState.Withered);
+        }
     }
 
-    /// <summary>
-    /// 收割作物
-    /// 在 playerFarming 脚本中调用
-    /// </summary>
+    private void UpdateRegrowth()
+    {
+        stateTimer += Time.deltaTime;
+        if (stateTimer >= cropData.regrowDelay)
+        {
+            TransitionToState(CropState.Mature);
+        }
+    }
+
+    private void HandleWitheredState()
+    {
+        Debug.Log("作物已枯萎，不可收割！");
+        DestroyCrop();
+    }
+
     public void Harvest()
     {
-        if (IsReadyToHarvest())
+        if (!IsReadyToHarvest()) return;
+
+        Debug.Log($"作物已收割！剩余收割次数: {remainingHarvests - 1}");
+        // PlayerInventory.AddResource(cropData.harvestReward);
+
+        remainingHarvests--;
+
+        if (remainingHarvests > 0 && cropData.regrowable)
         {
-            Debug.Log("作物已收割！");
-            // 增加玩家资源
-            //PlayerInventory.AddResource(cropData.harvestReward);
-            Destroy(gameObject); // 销毁作物
-            ResetLand();
+            TransitionToState(CropState.Regrowing);
         }
         else
         {
-            Debug.Log("作物尚未成熟，无法收割！");
+            DestroyCrop();
         }
     }
-    /// <summary>
-    /// 重置土地状态
-    /// 调用FarmLand脚本中的SwitchLandStatus方法和isLand
-    /// </summary>
-    public void ResetLand()
+
+    private void TransitionToState(CropState newState)
+    {
+        currentState = newState;
+        stateTimer = 0f;
+
+        switch (newState)
+        {
+            case CropState.Mature:
+                currentStage = growthStages.Length - 1; // 强制显示成熟阶段
+                Debug.Log($"作物成熟，剩余收割次数: {remainingHarvests}");
+                break;
+
+            case CropState.Regrowing:
+                Debug.Log($"开始再生，等待时间: {cropData.regrowDelay}秒");
+                break;
+        }
+
+        UpdateStageModel();
+    }
+
+    private void UpdateStageModel()
+    {
+        for (int i = 0; i < growthStages.Length; i++)
+        {
+            bool shouldShow = (i == currentStage) || 
+                            (currentState == CropState.Mature && i == growthStages.Length - 1);
+            
+            if (growthStages[i] != null)
+            {
+                growthStages[i].SetActive(shouldShow);
+            }
+        }
+    }
+
+    private void DestroyCrop()
+    {
+        ResetLand();
+        Destroy(gameObject);
+    }
+
+    private void ResetLand()
     {
         parentFarmLand.SwitchLandStatus(FarmLand.LandState.Soil);
-        parentFarmLand.isPlanted = false;   
+        parentFarmLand.isPlanted = false;
+    }
+
+    public bool IsReadyToHarvest(){
+        return currentState == CropState.Mature;
     }
 }
 

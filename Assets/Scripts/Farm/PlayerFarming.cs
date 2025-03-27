@@ -181,7 +181,4 @@ public class PlayerFarming : MonoBehaviour
         ClearSelection();
         return true;
     }
-
-
-
 }

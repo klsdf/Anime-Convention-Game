@@ -48999,7 +48999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
       propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
       propertyPath: inventorySystemDataList.list.Array.data[0].saveableItemDataList.saveableItemDataList.Array.data[0].itemName
@@ -49034,11 +49034,23 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
+      propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.data[2].itemName
+      value: tomato
+      objectReference: {fileID: 0}
+    - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
       propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.data[0]._cropData
       value: 
       objectReference: {fileID: 11400000, guid: 6136cf6fe1cc0844baf750b1fbbaa4d9, type: 2}
     - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
       propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.data[0].itemCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
+      propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.data[2]._cropData
+      value: 
+      objectReference: {fileID: 11400000, guid: b4a00a2de1ef9074e9b963a7d31ad8fe, type: 2}
+    - target: {fileID: 7971727643972795551, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
+      propertyPath: inventorySystemDataList.list.Array.data[1].saveableItemDataList.saveableItemDataList.Array.data[2].itemCount
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8170117539544545023, guid: e0f1fe055a5f2a641988145a23760934, type: 3}
