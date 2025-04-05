@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ee3ecacf525544ca09c232ac54862f, type: 3}
+  m_Name: Table
+  m_EditorClassIdentifier: 
+  id: 101
+  displayName: Table_demo
+  prefab: {fileID: 2241396787338369272, guid: e27d3a1e231778749bf534e2b61e3cfc, type: 3}
+  gridSize: {x: 2, y: 1}
+  placementLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  allowRotation: 1
