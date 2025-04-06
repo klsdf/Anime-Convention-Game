@@ -20,14 +20,24 @@ public class FurniturePlacementSystem : MonoBehaviour
     public Vector2Int floorSize = new Vector2Int(10, 10); // 地板网格尺寸(x,z)
 
     [Header("运行时状态")]
-    [SerializeField] private FurnitureInstance selectedFurniture;
+    
     [SerializeField] private Vector3Int lastCellPos;
     [SerializeField] private bool isValidPosition;
+    private FurnitureInstance selectedFurniture;
 
     void Update()
     {
-        HandleSelection();
-        HandleMovement();
+       HandleSelection();
+        // 只在按住鼠标时处理移动
+        if (Input.GetMouseButton(0) && selectedFurniture != null)
+        {
+            HandleMovement();
+        }
+        // 鼠标松开时放置家具
+        else if (selectedFurniture != null && !Input.GetMouseButton(0))
+        {
+            PlaceFurniture();
+        }
     }
 
     /// <summary>
@@ -35,37 +45,42 @@ public class FurniturePlacementSystem : MonoBehaviour
     /// </summary>
     void HandleSelection()
     {
-         if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, furnitureLayer))
             {
-                var furniture = hit.collider.GetComponent<FurnitureInstance>();
+                // 修改这里：从碰撞体所在物体向上查找FurnitureInstance
+                var furniture = hit.collider.GetComponentInParent<FurnitureInstance>();
+                
                 if (furniture != null)
                 {
                     selectedFurniture = furniture;
                     lastCellPos = floorGrid.WorldToCell(hit.point);
                     Debug.Log($"选中: {furniture.data.displayName}");
 
-                    // 初始位置校正
                     CorrectInitialPosition();
                 }
+                else
+                {
+                    Debug.LogError($"在{hit.collider.gameObject.name}上未找到FurnitureInstance组件");
+                }
             }
-        }
+        }   
     }
     /// <summary>
-    /// 检查是否会超出地板边界
+    /// 考虑旋转状态的边界检查
     /// </summary>
-    bool IsOutOfBounds(Vector3Int baseCell, Vector2Int furnitureSize)
+    bool IsOutOfBounds(Vector3Int baseCell, Vector2Int furnitureSize, Quaternion rotation)
     {
-        // 计算家具占用的所有网格
-        for (int x = 0; x < furnitureSize.x; x++)
+        bool isRotated = Mathf.Abs(rotation.eulerAngles.y % 180) > 45;
+        Vector2Int actualSize = isRotated ? new Vector2Int(furnitureSize.y, furnitureSize.x) : furnitureSize;
+
+        for (int x = 0; x < actualSize.x; x++)
         {
-            for (int z = 0; z < furnitureSize.y; z++)
+            for (int z = 0; z < actualSize.y; z++)
             {
                 Vector3Int checkCell = baseCell + new Vector3Int(x, 0, z);
-                
-                // 检查是否超出地板范围
                 if (checkCell.x < 0 || checkCell.x >= floorSize.x || 
                     checkCell.z < 0 || checkCell.z >= floorSize.y)
                 {
@@ -76,84 +91,110 @@ public class FurniturePlacementSystem : MonoBehaviour
         return false;
     }
 
-
-    /// <summary>
-    /// 处理家具移动逻辑
-    /// </summary>
-    void HandleMovement()
+    public void ResetSelectedFurniture()
     {
-        // 如果未选中家具或未按住鼠标左键，则返回
-        if (selectedFurniture == null || !Input.GetMouseButton(0)) return;
-        
-        if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), 
-            out RaycastHit hit, Mathf.Infinity, floorLayer))
-        {
-            Vector3Int currentCell = floorGrid.WorldToCell(hit.point);
-            // 检查是否超出地板边界
-            if (IsOutOfBounds(currentCell, selectedFurniture.data.gridSize))
-            {
-                SetInvalidState();
-                return;
-            }
-
-            // 如果当前位置与上次位置不同，则更新位置
-            if (currentCell != lastCellPos)
-            {
-                // 关键修改：确保家具完全露出地板
-                Vector3 snappedPos = floorGrid.GetCellCenterWorld(currentCell);
-                snappedPos.y = GetCorrectedYPosition(selectedFurniture);
-
-                selectedFurniture.transform.position = snappedPos;
-                lastCellPos = currentCell;
-
-                CheckPlacementValidity();
-            }
-        }
-
-/// <summary>
-/// 设置无效状态
-/// </summary>
+        selectedFurniture = null;
+    }   
+    
+    /// <summary>
+    /// 设置无效状态
+    /// </summary>
     void SetInvalidState()
     {
         isValidPosition = false;
         UpdateVisualFeedback();
         
         // 可选：添加红色闪烁效果
+        /*
         if (selectedFurniture != null)
         {
             StartCoroutine(FlashRed(selectedFurniture));
         }
+        */
+    }
+
+    
+    /// <summary>
+    /// 处理家具移动逻辑
+    /// </summary>
+    void HandleMovement()
+    {
+        if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), 
+            out RaycastHit hit, Mathf.Infinity, floorLayer))
+        {
+            Vector3Int currentCell = floorGrid.WorldToCell(hit.point);
+            
+            // 边界检查
+            if (IsOutOfBounds(currentCell, selectedFurniture.data.gridSize, selectedFurniture.transform.rotation))
+            {
+                SetInvalidState();
+                return;
+            }
+
+            // 位置更新
+            if (currentCell != lastCellPos)
+            {
+                Vector3 snappedPos = floorGrid.GetCellCenterWorld(currentCell);
+                snappedPos.y = GetCorrectedYPosition(selectedFurniture);
+                selectedFurniture.transform.position = snappedPos;
+                lastCellPos = currentCell;
+                
+                CheckPlacementValidity();
+            }
+
+            // 旋转处理
+            if (selectedFurniture.data.allowRotation && Input.GetKeyDown(KeyCode.R))
+            {
+                RotateFurniture();
+            }
+        }
     }
 
     /// <summary>
-    /// 添加红色闪烁效果
-    /// </summary>  
-    System.Collections.IEnumerator FlashRed(FurnitureInstance furniture)
+    /// 旋转家具并校正位置
+    /// </summary>
+    void RotateFurniture()
     {
-        var renderer = furniture.GetComponent<Renderer>();
-        if (renderer != null)
+        selectedFurniture.transform.Rotate(0, 90, 0);
+        
+        // 旋转后校正位置
+        Vector3 currentPos = selectedFurniture.transform.position;
+        selectedFurniture.transform.position = new Vector3(
+            currentPos.x,
+            GetCorrectedYPosition(selectedFurniture),
+            currentPos.z
+        );
+        
+        CheckPlacementValidity();
+    }
+    
+    
+    /// <summary>
+    /// 放置家具到当前位置
+    /// </summary>
+    void PlaceFurniture()
+    {
+        if (isValidPosition)
         {
-            Color originalColor = renderer.material.color;
-            renderer.material.color = Color.red;
-            yield return new WaitForSeconds(0.3f);
-            renderer.material.color = originalColor;
+            // 有效位置 - 确认放置
+            Debug.Log($"家具 {selectedFurniture.data.displayName} 已放置在 {lastCellPos}");
+            
+            // 这里可以添加放置音效或其他反馈
+            if (selectedFurniture.TryGetComponent(out Renderer renderer))
+            {
+                renderer.material.color = Color.white; // 恢复原始颜色
+            }
         }
+        else
+        {
+            // 无效位置 - 返回原位
+            selectedFurniture.transform.position = floorGrid.CellToWorld(lastCellPos);
+            Debug.LogWarning("无效位置，已返回原位");
+        }
+        
+        selectedFurniture = null; // 释放选中状态
     }
 
-
-        // 如果家具允许旋转，则处理旋转逻辑
-        if (selectedFurniture.data.allowRotation && Input.GetKeyDown(KeyCode.R))
-        {
-            selectedFurniture.transform.Rotate(0, 90, 0);
-            // 旋转后立即校正高度   
-            selectedFurniture.transform.position = new Vector3(
-                selectedFurniture.transform.position.x,
-                GetCorrectedYPosition(selectedFurniture),
-                selectedFurniture.transform.position.z
-            );
-            CheckPlacementValidity();
-        }
-    }
 
     /// <summary>
     /// 检查放置位置是否有效
@@ -164,7 +205,7 @@ public class FurniturePlacementSystem : MonoBehaviour
 
         // 检查边界
         Vector3Int baseCell = floorGrid.WorldToCell(selectedFurniture.transform.position);
-        if (IsOutOfBounds(baseCell, selectedFurniture.data.gridSize))
+        if (IsOutOfBounds(baseCell, selectedFurniture.data.gridSize, selectedFurniture.transform.rotation))
         {
             isValidPosition = false;
             UpdateVisualFeedback();
@@ -182,6 +223,8 @@ public class FurniturePlacementSystem : MonoBehaviour
         isValidPosition = colliders.All(c => c.gameObject != selectedFurniture.gameObject);
         UpdateVisualFeedback();
     }
+
+
      /// <summary>
     /// 计算家具正确的Y轴位置（确保完全露出）
     /// </summary>

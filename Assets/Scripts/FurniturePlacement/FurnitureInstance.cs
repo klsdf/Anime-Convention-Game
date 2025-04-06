@@ -11,6 +11,7 @@ using UnityEngine;
 public class FurnitureInstance : MonoBehaviour
 { 
    public FurnitureData data;
+   public Collider mainCollider;
     
     public void Initialize(FurnitureData data)
     {
