@@ -25,6 +25,15 @@ public class FurniturePlacementSystem : MonoBehaviour
     [SerializeField] private bool isValidPosition;
     private FurnitureInstance selectedFurniture;
 
+    [Header("碰撞检测设置")]       //1.2版本新增
+    public float overlapTestHeight = 1f; // 检测高度范围
+    public float overlapTestInset = 0.05f; // 边界内缩量防止边缘粘连
+
+    [Header("位置调整设置")]       //1.2版本新增
+    public float adjustmentStep = 0.5f; // 每次调整的步长
+    public int maxAdjustmentAttempts = 8; // 最大尝试次数
+    public float searchRadius = 2f; // 搜索半径 
+
     void Update()
     {
        HandleSelection();
@@ -188,8 +197,12 @@ public class FurniturePlacementSystem : MonoBehaviour
         else
         {
             // 无效位置 - 返回原位
-            selectedFurniture.transform.position = floorGrid.CellToWorld(lastCellPos);
-            Debug.LogWarning("无效位置，已返回原位");
+            TryAdjustPosition();
+            if(!isValidPosition){   
+                selectedFurniture.transform.position = floorGrid.CellToWorld(lastCellPos);
+                Debug.LogWarning("无效位置，已返回原位");
+            }
+            Debug.Log($"家具 {selectedFurniture.data.displayName} 已放置");
         }
         
         selectedFurniture = null; // 释放选中状态
@@ -199,6 +212,7 @@ public class FurniturePlacementSystem : MonoBehaviour
     /// <summary>
     /// 检查放置位置是否有效
     /// </summary>
+    /*
     void CheckPlacementValidity()
     {
         if (selectedFurniture == null) return;
@@ -223,6 +237,74 @@ public class FurniturePlacementSystem : MonoBehaviour
         isValidPosition = colliders.All(c => c.gameObject != selectedFurniture.gameObject);
         UpdateVisualFeedback();
     }
+    */
+    void CheckPlacementValidity()
+    {
+        if (selectedFurniture == null) return;
+
+        // 基础检查：边界和碰撞
+        Vector3Int baseCell = floorGrid.WorldToCell(selectedFurniture.transform.position);
+        if (IsOutOfBounds(baseCell, selectedFurniture.data.gridSize, selectedFurniture.transform.rotation))
+        {
+            isValidPosition = false;
+            UpdateVisualFeedback();
+            return;
+        }
+
+        // 1.2版本新增：精确物体级碰撞检测
+        isValidPosition = !CheckFurnitureObjectOverlap(selectedFurniture);
+        UpdateVisualFeedback();
+    }
+
+    /// <summary>
+    /// 检查家具对象实际模型是否重叠（1.2版本新增）
+    /// </summary>
+    bool CheckFurnitureObjectOverlap(FurnitureInstance furniture)
+    {
+        if (furniture.mainCollider == null)
+        {
+            Debug.LogWarning($"{furniture.name} 未指定mainCollider");
+            return false;
+        }
+
+        // 获取旋转后的包围盒
+        Bounds bounds = furniture.mainCollider.bounds;
+        
+        // 应用内缩防止边缘粘连
+        bounds.size -= new Vector3(overlapTestInset, 0, overlapTestInset);
+        
+        // 只检测上半部分（避免与地板碰撞）
+        float halfHeight = bounds.extents.y;
+        bounds.center += Vector3.up * halfHeight;
+        bounds.size = new Vector3(bounds.size.x, overlapTestHeight, bounds.size.z);
+
+        // 调试绘制
+        //DebugDrawBounds(bounds, Color.magenta, 2f);
+
+        // 检测重叠
+        Collider[] overlaps = Physics.OverlapBox(
+            bounds.center,
+            bounds.extents,
+            furniture.transform.rotation,
+            furnitureLayer
+        );
+
+        // 排除自身和父物体
+        foreach (var collider in overlaps)
+        {
+            if (collider.transform == furniture.mainCollider.transform || 
+                collider.transform.IsChildOf(furniture.transform))
+            {
+                continue;
+            }
+
+            Debug.Log($"与 {collider.name} 发生重叠", collider.gameObject);
+            return true;
+        }
+
+        return false;
+    }
+
 
 
      /// <summary>
@@ -247,6 +329,9 @@ public class FurniturePlacementSystem : MonoBehaviour
         return collider.bounds.extents.y + (furniture.transform.position.y - collider.bounds.min.y);
     }
 
+    /// <summary>
+    /// 修正初始位置
+    /// </summary>
     void CorrectInitialPosition()
     {
         Vector3 correctedPos = selectedFurniture.transform.position;
@@ -288,14 +373,16 @@ public class FurniturePlacementSystem : MonoBehaviour
         Debug.Log(isValidPosition ? "位置有效" : "位置无效（超出边界或碰撞）");
     }
 
+    /// <summary>
+    /// 释放家具
+    /// </summary>
     void ReleaseFurniture()
     {
         if (selectedFurniture != null)
         {
             if (!isValidPosition)
             {
-                // 位置无效时返回原位
-                selectedFurniture.transform.position = floorGrid.CellToWorld(lastCellPos);
+                TryAdjustPosition();
             }
             selectedFurniture = null;
         }
@@ -317,6 +404,67 @@ public class FurniturePlacementSystem : MonoBehaviour
             ),
             size
         );
+    }
+    /// <summary>
+    /// 智能调整位置寻找最近的有效位置（1.3版本优化）
+    /// </summary>
+    public void TryAdjustPosition()
+    {
+        if (selectedFurniture == null) return;
+
+        Vector3 originalPos = floorGrid.CellToWorld(lastCellPos);
+        Vector3 bestPosition = originalPos;
+        float closestDistance = float.MaxValue;
+        bool foundValidPosition = false;
+
+        // 尝试8个主要方向（包括对角线）
+        Vector3[] searchDirections = new Vector3[] {
+            Vector3.forward, Vector3.back, 
+            Vector3.left, Vector3.right,
+            (Vector3.forward + Vector3.left).normalized,
+            (Vector3.forward + Vector3.right).normalized,
+            (Vector3.back + Vector3.left).normalized,
+            (Vector3.back + Vector3.right).normalized
+        };
+
+        // 在多个距离层级上测试
+        for (float distance = adjustmentStep; distance <= searchRadius; distance += adjustmentStep)
+        {
+            foreach (Vector3 dir in searchDirections)
+            {
+                Vector3 testPos = originalPos + dir * distance;
+                selectedFurniture.transform.position = testPos;
+                
+                CheckPlacementValidity();
+                if (isValidPosition)
+                {
+                    float currentDistance = Vector3.Distance(testPos, originalPos);
+                    if (currentDistance < closestDistance)
+                    {
+                        closestDistance = currentDistance;
+                        bestPosition = testPos;
+                        foundValidPosition = true;
+                    }
+                }
+            }
+            
+            if (foundValidPosition) break; // 找到有效位置就停止
+        }
+
+        if (foundValidPosition)
+        {
+            selectedFurniture.transform.position = bestPosition;
+            lastCellPos = floorGrid.WorldToCell(bestPosition);
+            Debug.Log($"已调整到最近有效位置，偏移量: {bestPosition - originalPos}");
+        }
+        else
+        {
+            selectedFurniture.transform.position = originalPos;
+            Debug.LogWarning("未找到有效位置，已返回原位");
+        }
+        
+        // 最终验证
+        CheckPlacementValidity();
     }
 }
 

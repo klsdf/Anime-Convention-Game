@@ -26481,6 +26481,11 @@ MonoBehaviour:
   floorSize: {x: 17, y: 45}
   lastCellPos: {x: 0, y: 0, z: 0}
   isValidPosition: 0
+  overlapTestHeight: 1
+  overlapTestInset: 0.05
+  adjustmentStep: 1
+  maxAdjustmentAttempts: 8
+  searchRadius: 3
 --- !u!4 &877312730
 Transform:
   m_ObjectHideFlags: 0
@@ -56906,6 +56911,10 @@ PrefabInstance:
     - target: {fileID: 2241396787338369272, guid: e27d3a1e231778749bf534e2b61e3cfc, type: 3}
       propertyPath: m_Name
       value: Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 2309097740303759947, guid: e27d3a1e231778749bf534e2b61e3cfc, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3412709261337247630, guid: e27d3a1e231778749bf534e2b61e3cfc, type: 3}
       propertyPath: groundAnchor
