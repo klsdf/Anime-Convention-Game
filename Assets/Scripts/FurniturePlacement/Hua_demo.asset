@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53ee3ecacf525544ca09c232ac54862f, type: 3}
-  m_Name: Chair_demo
+  m_Name: Hua_demo
   m_EditorClassIdentifier: 
-  id: chair_101
-  displayName: chair_demo
+  id: Hua_101
+  displayName: Hua
   prefab: {fileID: 0}
   gridSize: {x: 1, y: 1}
   placementLayer:
     serializedVersion: 2
-    m_Bits: 2048
-  type: 0
+    m_Bits: 4096
+  type: 1
   allowRotation: 0

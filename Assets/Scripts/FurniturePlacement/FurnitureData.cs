@@ -9,9 +9,9 @@ using UnityEngine;
 /// </summary>
 public enum FurnitureType
 {
-    Floor = 0,
-    Wall = 1,
-    Ceiling = 2
+    Floor,
+    Wall,
+    Ceiling
 }
 
 [CreateAssetMenu(fileName = "FurnitureData", menuName = "Furniture/Data")]
@@ -25,5 +25,6 @@ public class FurnitureData : ScriptableObject
 
     [Header("放置设置")]
     public LayerMask placementLayer; // 允许放置的表面层级
+    public FurnitureType type;       // 家具类型
     public bool allowRotation;       // 是否允许旋转
 }
