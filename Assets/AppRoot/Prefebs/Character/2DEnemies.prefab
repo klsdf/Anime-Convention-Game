@@ -163,9 +163,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  runSpeed: 4
   attackDamage: 10
   attackRange: 1.5
+  chaseRange: 5
   attackCooldown: 1
+  idleTime: 2
+  walkTime: 2
+  changeDirectionTime: 2
 --- !u!95 &333685280573550588
 Animator:
   serializedVersion: 5
@@ -176,7 +181,7 @@ Animator:
   m_GameObject: {fileID: 2019514319490180076}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: eb93380eac737487ebb3f51b10ddf436, type: 2}
+  m_Controller: {fileID: 9100000, guid: a7e75670694d84438a9be9729ff13a75, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
