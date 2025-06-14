@@ -69,7 +69,7 @@ public class ScenePerspective : MonoBehaviour
     /// <summary>
     /// 玩家控制器引用
     /// </summary>
-    private DemoCharacterController playerController;
+    private Character2DController playerController;
 
     private ScalePointSize pointSize1;
     private ScalePointSize pointSize2;
@@ -91,9 +91,9 @@ public class ScenePerspective : MonoBehaviour
         {
             scaleObj.originScale = scaleObj.objTransform.localScale;
 
-            if (scaleObj.objTransform.gameObject.GetComponent<DemoCharacterController>() != null)
+            if (scaleObj.objTransform.gameObject.GetComponent<Character2DController>() != null)
             {
-                playerController = scaleObj.objTransform.gameObject.GetComponent<DemoCharacterController>();
+                playerController = scaleObj.objTransform.gameObject.GetComponent<Character2DController>();
                 playerSpeed = playerController.moveSpeed;
             }
 

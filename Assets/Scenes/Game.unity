@@ -9931,8 +9931,8 @@ GameObject:
   - component: {fileID: 967044711}
   - component: {fileID: 967044713}
   - component: {fileID: 967044714}
-  - component: {fileID: 967044715}
   - component: {fileID: 967044716}
+  - component: {fileID: 967044717}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -10082,24 +10082,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &967044715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967044710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9883d7c27c7ca754dadcce0d3840cb26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  facingDirection: -1
-  jumpHeight: 1.5
-  jumpDuration: 0.5
-  interactionTips: {fileID: 1292342851}
-  enableFootstepSound: 1
 --- !u!95 &967044716
 Animator:
   serializedVersion: 5
@@ -10121,6 +10103,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &967044717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967044710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90d94db427729d741906afb76c261901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  facingDirection: 1
+  jumpHeight: 1.5
+  jumpDuration: 0.5
+  interactionTips: {fileID: 1292342851}
+  enableFootstepSound: 1
 --- !u!1001 &976455559
 PrefabInstance:
   m_ObjectHideFlags: 0

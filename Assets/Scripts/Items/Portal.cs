@@ -66,7 +66,7 @@ public class Portal : InteractObjBase
         if (other.CompareTag("Player"))
         {
             player = other.gameObject;
-            other.GetComponent<DemoCharacterController>().SetInteractObject(this.gameObject);
+            other.GetComponent<Character2DController>().SetInteractObject(this.gameObject);
         }
     }
 
@@ -74,7 +74,7 @@ public class Portal : InteractObjBase
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<DemoCharacterController>().ClearInteractObject();
+            other.GetComponent<Character2DController>().ClearInteractObject();
         }
     }
 
