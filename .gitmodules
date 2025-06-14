@@ -1,0 +1,3 @@
+[submodule "Assets/YanGameFrameWork"]
+	path = Assets/YanGameFrameWork
+	url = https://github.com/klsdf/YanGameFrameWork.git
