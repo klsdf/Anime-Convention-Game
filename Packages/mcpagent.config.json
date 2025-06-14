@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+      "mcp-unity": {
+        "command": "node",
+        "args": [
+          "/Users/colin/Documents/GitHub/Anime-Convention-Game-Demo/Library/PackageCache/com.gamelovers.mcp-unity@086a94cf24/Server~/build/index.js"
+        ]
+      }
+    }
+  }

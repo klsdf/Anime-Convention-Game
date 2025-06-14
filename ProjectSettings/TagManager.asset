@@ -17,10 +17,10 @@ TagManager:
   - Ground
   - Item
   - farmlandLayer
-  - 
-  - 
-  - 
-  - 
+  - placeable_floor
+  - placeable_wall
+  - placeable_ceiling
+  - furnitureLayer
   - 
   - 
   - 
